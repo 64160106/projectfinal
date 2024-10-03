@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lost and Found - Home</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/styles.css"> <!-- Your custom styles -->
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Custom styles -->
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script> <!-- Moment.js -->
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -14,7 +15,7 @@
             <ul class="navbar-nav ml-auto">
                 <% if (username) { %>
                     <li class="nav-item">
-                        <span class="navbar-text">Welcome, <%= username %>!</span>
+                        <span class="nav-link">Logged in as <%= username %></span>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/create-post">Create Post</a>
@@ -35,25 +36,51 @@
     </nav>
 
     <div class="container mt-5">
-        <h1 class="text-center">Welcome to Lost and Found</h1>
-        <p class="text-center">Post your lost and found items here.</p>
-        
-        <div class="row">
-            <% posts.forEach(post => { %>
-                <div class="col-md-4">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title"><%= post.item_description %></h5>
-                            <p class="card-text">Location: <%= post.location %></p>
-                            <p class="card-text">Posted by: <%= post.username %></p> <!-- แสดงชื่อผู้โพสต์ -->
-                            <p class="card-text">Time: <%= new Date(post.created_at).toLocaleString() %></p> <!-- แสดงเวลาโพสต์ -->
-                            <img src="/uploads/<%= post.image %>" alt="<%= post.item_description %>" class="img-fluid" />
-                            <a href="/post/<%= post.id %>" class="btn btn-primary">View Details</a>
+        <h2>Lost and Found Posts</h2>
+        <% if (posts.length > 0) { %>
+            <div class="row">
+                <% posts.forEach(post => { %>
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <img class="card-img-top" src="/uploads/<%= post.image %>" alt="Image of <%= post.item_description %>">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= post.item_description %></h5>
+                                <p class="card-text">Location: <%= post.location %></p>
+                                <p class="card-text">
+                                    Found on: 
+                                    <%= new Date(post.found_time).toLocaleString('en-GB', {
+                                        day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric'
+                                    }) %>
+                                </p>
+                                <p class="card-text">Posted by: <%= post.username %></p>
+                                <p class="card-text">Status: <%= post.status %></p>
+
+                                <!-- Check if the logged-in user is the post owner to show delete button -->
+                                <% if (username === post.username) { %>
+                                    <form action="/delete-post/<%= post.id %>" method="POST">
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+
+                                    <!-- Show status change form if post is still 'กำลังตามหา' -->
+                                    <% if (post.status === 'กำลังตามหา') { %>
+                                        <form action="/update-status/<%= post.id %>" method="POST" class="mt-2">
+                                            <select name="status" class="form-control">
+                                                <option value="claimed" <%= post.status === 'claimed' ? 'selected' : '' %>>Claimed</option>
+                                                <option value="found" <%= post.status === 'found' ? 'selected' : '' %>>Found</option>
+                                                <option value="lost" <%= post.status === 'lost' ? 'selected' : '' %>>Lost</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-success btn-sm mt-2">Update Status</button>
+                                        </form>
+                                    <% } %>
+                                <% } %>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <% }); %>
-        </div>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <p>No posts available. Be the first to create a post!</p>
+        <% } %>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

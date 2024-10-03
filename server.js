@@ -53,7 +53,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
+    limits: { fileSize: 10 * 1024 * 1024 }, // Limit file size to 10MB
     fileFilter: (req, file, cb) => {
         const filetypes = /jpeg|jpg|png|gif|webp|bmp/; // Supported file types
         const mimetype = filetypes.test(file.mimetype); // Check MIME type
@@ -224,33 +224,48 @@ app.post('/create-post', upload.single('image'), [
     });
 });
 
-// Route for logging out
-app.get('/logout', (req, res) => {
-    req.session.destroy(err => {
+// Route for changing post status
+app.post('/update-status/:id', isAuthenticated, (req, res) => {
+    const postId = req.params.id; // รับ ID ของโพสต์
+    const newStatus = req.body.newStatus; // รับสถานะใหม่จากฟอร์ม
+
+    // ตรวจสอบว่าสถานะใหม่ที่ส่งมาถูกต้องหรือไม่
+    if (!['claimed', 'lost'].includes(newStatus)) {
+        return res.status(400).send('Invalid status');
+    }
+
+    const query = 'UPDATE posts SET status = ? WHERE id = ? AND user_id = ?';
+    db.query(query, [newStatus, postId, req.session.userId], (err, result) => {
         if (err) {
-            console.error('Error destroying session:', err);
-            return res.redirect('/');
+            console.error('Database update error:', err);
+            return res.status(500).send('Database update error');
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).send('Post not found or not authorized');
         }
         res.redirect('/');
     });
 });
 
-// Error handling middleware for file upload errors
+// Route for logout
+app.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            console.error('Error destroying session:', err);
+            return res.status(500).send('Error logging out');
+        }
+        res.redirect('/login');
+    });
+});
+
+// Error handling middleware
 app.use((err, req, res, next) => {
-    if (err instanceof multer.MulterError) {
-        // Handle Multer errors
-        console.error('Multer error:', err);
-        return res.status(400).send('Multer error: ' + err.message);
-    } else if (err) {
-        // Handle general errors
-        console.error('Error:', err);
-        return res.status(500).send('Error: ' + err.message);
-    }
-    next();
+    console.error('Error:', err);
+    res.status(500).send('Internal Server Error');
 });
 
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
