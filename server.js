@@ -61,7 +61,7 @@ const upload = multer({
         if (mimetype && extname) {
             return cb(null, true); // Accept file
         }
-        cb(new Error('Error: File type not supported!')); // Reject file
+        cb(new Error('File type not supported! Only jpeg, jpg, png, gif, webp, bmp are allowed.'));
     }
 });
 
@@ -133,7 +133,7 @@ app.post('/register', [
             console.error('Error hashing password:', err);
             return res.status(500).send('Error hashing password');
         }
-        const query = 'INSERT INTO users (username, password) VALUES (?, ?)';
+        const query = 'INSERT INTO users (username, password) VALUES (?)';
 
         db.query('SELECT * FROM users WHERE username = ?', [username], (err, result) => {
             if (err) {
@@ -143,7 +143,7 @@ app.post('/register', [
             if (result.length > 0) {
                 return res.status(400).send('Username already exists');
             } else {
-                db.query(query, [username, hash], err => {
+                db.query(query, [[username, hash]], err => {
                     if (err) {
                         console.error('Database insert error:', err);
                         return res.status(500).send('Database insert error');
@@ -199,13 +199,14 @@ app.get('/create-post', isAuthenticated, (req, res) => {
 app.post('/create-post', upload.single('image'), [
     check('item_description').notEmpty().withMessage('Item description is required'),
     check('location').notEmpty().withMessage('Location is required'),
+    check('found_time').notEmpty().withMessage('Found time is required'),
 ], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).send(errors.array());
     }
 
-    const { item_description, location } = req.body;
+    const { item_description, location, found_time } = req.body;
     const image = req.file ? req.file.filename : null;
 
     // Check if the image is uploaded
@@ -213,8 +214,8 @@ app.post('/create-post', upload.single('image'), [
         return res.status(400).send('Error: No file uploaded or file type not supported.');
     }
 
-    const query = 'INSERT INTO posts (user_id, item_description, location, image) VALUES (?, ?, ?, ?)';
-    db.query(query, [req.session.userId, item_description, location, image], (err) => {
+    const query = 'INSERT INTO posts (user_id, item_description, location, image, found_time) VALUES (?, ?, ?, ?, ?)';
+    db.query(query, [req.session.userId, item_description, location, image, found_time], (err) => {
         if (err) {
             console.error('Database insert error:', err);
             return res.status(500).send('Database insert error: ' + err.message);

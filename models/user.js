@@ -13,4 +13,7 @@ const User = sequelize.define('User', {
     }
 });
 
+// เพิ่มความสัมพันธ์กับ Post
+User.hasMany(Post, { foreignKey: 'userId', as: 'posts' });
+
 module.exports = User;
