@@ -176,7 +176,6 @@ app.post('/register', [
 
 // Route for login
 // แก้ไขส่วนนี้ในเส้นทาง login
-// แก้ไขส่วนนี้ในเส้นทาง login
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
 
