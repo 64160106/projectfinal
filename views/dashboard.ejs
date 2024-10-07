@@ -4,9 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <h1>Welcome, <%= username %>!</h1>
-    <a href="/logout">Logout</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Lost and Found</a>
+        <div class="navbar-nav ml-auto">
+            <a class="nav-item nav-link" href="/logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1>Welcome, <%= username %>!</h1>
+        <h2>Your Posts</h2>
+        <a href="/create-post" class="btn btn-primary mb-3">Create New Post</a>
+        <% if (posts.length > 0) { %>
+            <ul class="list-group">
+                <% posts.forEach(post => { %>
+                    <li class="list-group-item">
+                        <h5><%= post.item_description %></h5>
+                        <p>Location: <%= post.location %></p>
+                        <p>Found Time: <%= new Date(post.found_time).toLocaleString() %></p>
+                        <p>Status: <%= post.status %></p>
+                        <a href="/edit-post/<%= post.id %>" class="btn btn-sm btn-secondary">Edit</a>
+                    </li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>You haven't created any posts yet.</p>
+        <% } %>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

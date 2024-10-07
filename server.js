@@ -29,6 +29,7 @@ app.set('views', path.join(__dirname, 'views'));
 // Serve static files and use body-parser
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json()); // เพิ่มการรองรับ JSON
 
 // Session configuration
 app.use(session({
@@ -82,6 +83,22 @@ db.connect(err => {
     console.log('Connected to MySQL database!');
 });
 
+// เพิ่มฟังก์ชันนี้หลังจาก db.connect
+function getPost(postId) {
+    return new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM posts WHERE id = ?';
+        db.query(query, [postId], (err, results) => {
+            if (err) {
+                reject(err);
+            } else if (results.length === 0) {
+                reject(new Error('Post not found'));
+            } else {
+                resolve(results[0]);
+            }
+        });
+    });
+}
+
 // Middleware to check if user is logged in
 const isAuthenticated = (req, res, next) => {
     if (req.session.userId) {
@@ -92,7 +109,8 @@ const isAuthenticated = (req, res, next) => {
 };
 
 // Route for the index page
-app.get('/', (req, res) => {
+// Route for the main page after login
+app.get('/', isAuthenticated, (req, res) => {
     const query = 'SELECT posts.*, users.username FROM posts JOIN users ON posts.user_id = users.id ORDER BY posts.id DESC';
     db.query(query, (err, results) => {
         if (err) {
@@ -102,6 +120,7 @@ app.get('/', (req, res) => {
         res.render('index', {
             posts: results,
             username: req.session.username,
+            userId: req.session.userId
         });
     });
 });
@@ -113,7 +132,7 @@ app.get('/register', (req, res) => {
 
 // Route for showing the login form
 app.get('/login', (req, res) => {
-    res.render('login');
+    res.render('login', { error: null });
 });
 
 // Route for registration
@@ -123,7 +142,7 @@ app.post('/register', [
 ], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).send(errors.array());
+        return res.render('register', { error: errors.array()[0].msg });
     }
 
     const { username, password } = req.body;
@@ -131,22 +150,22 @@ app.post('/register', [
     bcrypt.hash(password, 10, (err, hash) => {
         if (err) {
             console.error('Error hashing password:', err);
-            return res.status(500).send('Error hashing password');
+            return res.render('register', { error: 'Error hashing password' });
         }
         const query = 'INSERT INTO users (username, password) VALUES (?)';
 
         db.query('SELECT * FROM users WHERE username = ?', [username], (err, result) => {
             if (err) {
                 console.error('Database query error:', err);
-                return res.status(500).send('Database query error');
+                return res.render('register', { error: 'Database query error' });
             }
             if (result.length > 0) {
-                return res.status(400).send('Username already exists');
+                return res.render('register', { error: 'Username already exists' });
             } else {
                 db.query(query, [[username, hash]], err => {
                     if (err) {
                         console.error('Database insert error:', err);
-                        return res.status(500).send('Database insert error');
+                        return res.render('register', { error: 'Database insert error' });
                     }
                     res.redirect('/login');
                 });
@@ -156,36 +175,37 @@ app.post('/register', [
 });
 
 // Route for login
-app.post('/login', loginLimiter, (req, res) => {
+// แก้ไขส่วนนี้ในเส้นทาง login
+// แก้ไขส่วนนี้ในเส้นทาง login
+app.post('/login', (req, res) => {
     const { username, password } = req.body;
 
-    if (!username || !password) {
-        return res.status(400).send('Please provide both username and password');
-    }
-
-    db.query('SELECT * FROM users WHERE username = ?', [username], (err, result) => {
+    db.query('SELECT * FROM users WHERE username = ?', [username], (err, results) => {
         if (err) {
-            console.error('Database query error:', err);
-            return res.status(500).send('Database query error');
-        }
-        if (result.length === 0) {
-            return res.status(400).send('User not found');
+            console.error(err);
+            return res.render('login', { error: 'An error occurred. Please try again.' });
         }
 
-        const user = result[0];
+        if (results.length === 0) {
+            return res.render('login', { error: 'Invalid username or password' });
+        }
+
+        const user = results[0];
 
         bcrypt.compare(password, user.password, (err, isMatch) => {
             if (err) {
-                console.error('Error comparing password:', err);
-                return res.status(500).send('Error comparing password');
-            }
-            if (!isMatch) {
-                return res.status(400).send('Invalid password');
+                console.error(err);
+                return res.render('login', { error: 'An error occurred. Please try again.' });
             }
 
+            if (!isMatch) {
+                return res.render('login', { error: 'Invalid username or password' });
+            }
+
+            // ล็อกอินสำเร็จ
             req.session.userId = user.id;
             req.session.username = user.username;
-            res.redirect('/');
+            res.redirect('/'); // เปลี่ยนจาก '/dashboard' เป็น '/'
         });
     });
 });
@@ -195,6 +215,7 @@ app.get('/create-post', isAuthenticated, (req, res) => {
     res.render('create-post', { username: req.session.username });
 });
 
+// Route for handling post creation
 // Route for handling post creation
 app.post('/create-post', upload.single('image'), [
     check('item_description').notEmpty().withMessage('Item description is required'),
@@ -214,8 +235,8 @@ app.post('/create-post', upload.single('image'), [
         return res.status(400).send('Error: No file uploaded or file type not supported.');
     }
 
-    const query = 'INSERT INTO posts (user_id, item_description, location, image, found_time) VALUES (?, ?, ?, ?, ?)';
-    db.query(query, [req.session.userId, item_description, location, image, found_time], (err) => {
+    const query = 'INSERT INTO posts (user_id, item_description, location, image, found_time, status) VALUES (?, ?, ?, ?, ?, ?)';
+    db.query(query, [req.session.userId, item_description, location, image, found_time, 'searching'], (err) => {
         if (err) {
             console.error('Database insert error:', err);
             return res.status(500).send('Database insert error: ' + err.message);
@@ -224,27 +245,37 @@ app.post('/create-post', upload.single('image'), [
     });
 });
 
-// Route for changing post status
-app.post('/update-status/:id', isAuthenticated, (req, res) => {
-    const postId = req.params.id; // รับ ID ของโพสต์
-    const newStatus = req.body.newStatus; // รับสถานะใหม่จากฟอร์ม
+// แก้ไข route สำหรับการอัพเดทสถานะ
+app.post('/update-status/:id', isAuthenticated, async (req, res) => {
+    const postId = req.params.id;
+    const newStatus = req.body.newStatus;
 
-    // ตรวจสอบว่าสถานะใหม่ที่ส่งมาถูกต้องหรือไม่
-    if (!['claimed', 'lost'].includes(newStatus)) {
+    if (!['searching', 'found', 'unclaimed'].includes(newStatus)) {
         return res.status(400).send('Invalid status');
     }
 
-    const query = 'UPDATE posts SET status = ? WHERE id = ? AND user_id = ?';
-    db.query(query, [newStatus, postId, req.session.userId], (err, result) => {
-        if (err) {
-            console.error('Database update error:', err);
-            return res.status(500).send('Database update error');
+    try {
+        const post = await getPost(postId);
+
+        if (post.user_id !== req.session.userId) {
+            return res.status(403).send('Not authorized to update this post');
         }
-        if (result.affectedRows === 0) {
-            return res.status(404).send('Post not found or not authorized');
-        }
-        res.redirect('/');
-    });
+
+        const query = 'UPDATE posts SET status = ? WHERE id = ?';
+        db.query(query, [newStatus, postId], (err, result) => {
+            if (err) {
+                console.error('Database update error:', err);
+                return res.status(500).send('Database update error');
+            }
+            if (result.affectedRows === 0) {
+                return res.status(404).send('Post not found');
+            }
+            res.redirect('/');
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Server error');
+    }
 });
 
 // Route for logout
@@ -254,14 +285,8 @@ app.get('/logout', (req, res) => {
             console.error('Error destroying session:', err);
             return res.status(500).send('Error logging out');
         }
-        res.redirect('/login');
+        res.redirect('/');
     });
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-    console.error('Error:', err);
-    res.status(500).send('Internal Server Error');
 });
 
 // Start the server

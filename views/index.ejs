@@ -55,23 +55,21 @@
                                 <p class="card-text">Posted by: <%= post.username %></p>
                                 <p class="card-text">Status: <%= post.status %></p>
 
-                                <!-- Check if the logged-in user is the post owner to show delete button -->
+                                <!-- Check if the logged-in user is the post owner to show delete and update buttons -->
                                 <% if (username === post.username) { %>
-                                    <form action="/delete-post/<%= post.id %>" method="POST">
+                                    <form action="/delete-post/<%= post.id %>" method="POST" class="mb-2">
                                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                     </form>
 
-                                    <!-- Show status change form if post is still 'กำลังตามหา' -->
-                                    <% if (post.status === 'กำลังตามหา') { %>
-                                        <form action="/update-status/<%= post.id %>" method="POST" class="mt-2">
-                                            <select name="status" class="form-control">
-                                                <option value="claimed" <%= post.status === 'claimed' ? 'selected' : '' %>>Claimed</option>
-                                                <option value="found" <%= post.status === 'found' ? 'selected' : '' %>>Found</option>
-                                                <option value="lost" <%= post.status === 'lost' ? 'selected' : '' %>>Lost</option>
-                                            </select>
-                                            <button type="submit" class="btn btn-success btn-sm mt-2">Update Status</button>
-                                        </form>
-                                    <% } %>
+                                    <!-- Show status change form for the post owner -->
+                                    <form action="/update-status/<%= post.id %>" method="POST" class="mt-2">
+                                        <select name="newStatus" class="form-control">
+                                            <option value="searching" <%= post.status === 'searching' ? 'selected' : '' %>>กำลังตามหา</option>
+                                            <option value="found" <%= post.status === 'found' ? 'selected' : '' %>>พบเจ้าของแล้ว</option>
+                                            <option value="unclaimed" <%= post.status === 'unclaimed' ? 'selected' : '' %>>ยังไม่พบเจ้าของ</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-success btn-sm mt-2">Update Status</button>
+                                    </form>
                                 <% } %>
                             </div>
                         </div>
