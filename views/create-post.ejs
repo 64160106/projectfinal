@@ -29,6 +29,13 @@
         <h1>Create a New Post</h1>
         <form action="/create-post" method="POST" enctype="multipart/form-data">
             <div class="form-group">
+                <label for="post_type">Post Type</label>
+                <select class="form-control" id="post_type" name="post_type" required>
+                    <option value="found">Found Item</option>
+                    <option value="lost">Lost Item</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <label for="item_description">Item Description</label>
                 <input type="text" class="form-control" id="item_description" name="item_description" required>
             </div>
@@ -37,7 +44,11 @@
                 <input type="text" class="form-control" id="location" name="location" required>
             </div>
             <div class="form-group">
-                <label for="found_time">Found Date & Time</label>
+                <label for="contact_info">Contact Information</label>
+                <input type="text" class="form-control" id="contact_info" name="contact_info" required>
+              </div>
+            <div class="form-group">
+                <label for="found_time">Date & Time</label>
                 <input type="datetime-local" class="form-control" id="found_time" name="found_time" required>
             </div>
             <div class="form-group">

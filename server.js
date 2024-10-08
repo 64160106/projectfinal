@@ -1,14 +1,13 @@
-// เพิ่มการนำเข้าโมดูลที่จำเป็น
-const express = require('express');
 const path = require('path');
-const mysql = require('mysql');
-const bcrypt = require('bcrypt');
-const bodyParser = require('body-parser');
-const session = require('express-session');
-const multer = require('multer');
 const { check, validationResult } = require('express-validator');
-const helmet = require('helmet');
+const express = require('express');
+const multer = require('multer');
 const rateLimit = require('express-rate-limit');
+const mysql = require('mysql');
+const session = require('express-session');
+const helmet = require('helmet');
+const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
 
 const app = express();
 
@@ -18,8 +17,7 @@ app.use(helmet());
 // Rate limiting middleware
 const loginLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5, // Limit to 5 login attempts per windowMs
-    message: 'Too many login attempts. Please try again later.',
+    max: 5 // limit each IP to 5 requests per windowMs
 });
 
 // Set up EJS
@@ -29,40 +27,33 @@ app.set('views', path.join(__dirname, 'views'));
 // Serve static files and use body-parser
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json()); // เพิ่มการรองรับ JSON
+app.use(bodyParser.json());
 
 // Session configuration
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'your-secret-key', // Use environment variable for security
+    secret: 'your_secret_key',
     resave: false,
-    saveUninitialized: false,
-    cookie: {
-        secure: false, // Set to true if using HTTPS
-        maxAge: 1000 * 60 * 60 // 1 hour
-    }
+    saveUninitialized: true,
+    cookie: { secure: false } // set to true if using https
 }));
 
 // Multer configuration for file uploads
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'public/uploads/'); // Specify the upload folder
+    destination: function (req, file, cb) {
+        cb(null, 'public/uploads/')
     },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname)); // Use timestamp as the filename
-    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname))
+    }
 });
 
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 10 * 1024 * 1024 }, // Limit file size to 10MB
-    fileFilter: (req, file, cb) => {
-        const filetypes = /jpeg|jpg|png|gif|webp|bmp/; // Supported file types
-        const mimetype = filetypes.test(file.mimetype); // Check MIME type
-        const extname = filetypes.test(path.extname(file.originalname).toLowerCase()); // Check file extension
-        if (mimetype && extname) {
-            return cb(null, true); // Accept file
+    fileFilter: function (req, file, cb) {
+        if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+            return cb(new Error('Only image files are allowed!'), false);
         }
-        cb(new Error('File type not supported! Only jpeg, jpg, png, gif, webp, bmp are allowed.'));
+        cb(null, true);
     }
 });
 
@@ -83,22 +74,6 @@ db.connect(err => {
     console.log('Connected to MySQL database!');
 });
 
-// เพิ่มฟังก์ชันนี้หลังจาก db.connect
-function getPost(postId) {
-    return new Promise((resolve, reject) => {
-        const query = 'SELECT * FROM posts WHERE id = ?';
-        db.query(query, [postId], (err, results) => {
-            if (err) {
-                reject(err);
-            } else if (results.length === 0) {
-                reject(new Error('Post not found'));
-            } else {
-                resolve(results[0]);
-            }
-        });
-    });
-}
-
 // Middleware to check if user is logged in
 const isAuthenticated = (req, res, next) => {
     if (req.session.userId) {
@@ -108,10 +83,15 @@ const isAuthenticated = (req, res, next) => {
     }
 };
 
-// Route for the index page
-// Route for the main page after login
-app.get('/', isAuthenticated, (req, res) => {
-    const query = 'SELECT posts.*, users.username FROM posts JOIN users ON posts.user_id = users.id ORDER BY posts.id DESC';
+// Route for the index page (main page)
+app.get('/', (req, res) => {
+    const query = `
+        SELECT posts.*, users.username 
+        FROM posts 
+        JOIN users ON posts.user_id = users.id 
+        WHERE posts.status = 'searching' 
+        ORDER BY posts.id DESC
+    `;
     db.query(query, (err, results) => {
         if (err) {
             console.error('Database query error:', err);
@@ -125,17 +105,14 @@ app.get('/', isAuthenticated, (req, res) => {
     });
 });
 
-// Route for showing the registration form
 app.get('/register', (req, res) => {
     res.render('register');
 });
 
-// Route for showing the login form
 app.get('/login', (req, res) => {
     res.render('login', { error: null });
 });
 
-// Route for registration
 app.post('/register', [
     check('username').notEmpty().withMessage('Username is required'),
     check('password').notEmpty().withMessage('Password is required'),
@@ -174,8 +151,6 @@ app.post('/register', [
     });
 });
 
-// Route for login
-// แก้ไขส่วนนี้ในเส้นทาง login
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
 
@@ -201,41 +176,42 @@ app.post('/login', (req, res) => {
                 return res.render('login', { error: 'Invalid username or password' });
             }
 
-            // ล็อกอินสำเร็จ
             req.session.userId = user.id;
             req.session.username = user.username;
-            res.redirect('/'); // เปลี่ยนจาก '/dashboard' เป็น '/'
+            res.redirect('/');
         });
     });
 });
 
-// Route for creating a post
 app.get('/create-post', isAuthenticated, (req, res) => {
     res.render('create-post', { username: req.session.username });
 });
 
-// Route for handling post creation
-// Route for handling post creation
-app.post('/create-post', upload.single('image'), [
+app.post('/create-post', isAuthenticated, upload.single('image'), [
     check('item_description').notEmpty().withMessage('Item description is required'),
     check('location').notEmpty().withMessage('Location is required'),
     check('found_time').notEmpty().withMessage('Found time is required'),
+    check('post_type').notEmpty().withMessage('Post type is required'),
+    check('contact_info').notEmpty().withMessage('Contact information is required'),
 ], (req, res) => {
+    if (!req.session.userId) {
+        return res.status(401).send('Unauthorized. Please login again.');
+    }
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).send(errors.array());
     }
 
-    const { item_description, location, found_time } = req.body;
+    const { item_description, location, found_time, post_type, contact_info } = req.body;
     const image = req.file ? req.file.filename : null;
 
-    // Check if the image is uploaded
     if (!image) {
         return res.status(400).send('Error: No file uploaded or file type not supported.');
     }
 
-    const query = 'INSERT INTO posts (user_id, item_description, location, image, found_time, status) VALUES (?, ?, ?, ?, ?, ?)';
-    db.query(query, [req.session.userId, item_description, location, image, found_time, 'searching'], (err) => {
+    const query = 'INSERT INTO posts (user_id, item_description, location, image, found_time, status, post_type, contact_info) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(query, [req.session.userId, item_description, location, image, found_time, 'searching', post_type, contact_info], (err) => {
         if (err) {
             console.error('Database insert error:', err);
             return res.status(500).send('Database insert error: ' + err.message);
@@ -244,7 +220,6 @@ app.post('/create-post', upload.single('image'), [
     });
 });
 
-// แก้ไข route สำหรับการอัพเดทสถานะ
 app.post('/update-status/:id', isAuthenticated, async (req, res) => {
     const postId = req.params.id;
     const newStatus = req.body.newStatus;
@@ -277,7 +252,43 @@ app.post('/update-status/:id', isAuthenticated, async (req, res) => {
     }
 });
 
-// Route for logout
+app.post('/delete-post/:id', isAuthenticated, (req, res) => {
+    const postId = req.params.id;
+    const userId = req.session.userId;
+
+    const query = 'SELECT * FROM posts WHERE id = ? AND user_id = ?';
+    db.query(query, [postId, userId], (err, results) => {
+        if (err) {
+            console.error('Database query error:', err);
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+
+        if (results.length === 0) {
+            return res.status(403).json({ message: 'Not authorized to delete this post' });
+        }
+
+        const deleteQuery = 'DELETE FROM posts WHERE id = ?';
+        db.query(deleteQuery, [postId], (deleteErr, deleteResult) => {
+            if (deleteErr) {
+                console.error('Error deleting post:', deleteErr);
+                return res.status(500).json({ message: 'Error deleting post' });
+            }
+
+            res.redirect('/');
+        });
+    });
+});
+
+async function getPost(postId) {
+    return new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM posts WHERE id = ?';
+        db.query(query, [postId], (err, results) => {
+            if (err) reject(err);
+            resolve(results[0]);
+        });
+    });
+}
+
 app.get('/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) {
@@ -288,7 +299,6 @@ app.get('/logout', (req, res) => {
     });
 });
 
-// Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

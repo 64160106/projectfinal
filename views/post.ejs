@@ -3,30 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Posts</title>
+    <title>โพสต์ทั้งหมด</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .post-image {
+            max-width: 300px;
+            height: auto;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Posts</h1>
-    <a href="/">หน้าแรก</a>
-    <h2>โพสต์ทั้งหมด</h2>
-    <ul>
-        <% posts.forEach(post => { %>
-            <li>
-                <strong><%= post.description %></strong> - <%= post.location %> <br>
-                <small>ผู้โพสต์: <%= post.user.username %></small> <br> <!-- แสดงชื่อผู้โพสต์ -->
-                <small>เวลาที่พบ: <%= new Date(post.found_time).toLocaleString('th-TH', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                }) %></small>
-                <br>
-                <% if (post.image) { %> <!-- ตรวจสอบว่ามีรูปภาพหรือไม่ -->
-                    <img src="/uploads/<%= post.image %>" alt="โพสต์รูปภาพ" style="max-width: 300px; height: auto;">
-                <% } %>
-            </li>
-        <% }) %>
-    </ul>
+    <div class="container mt-4">
+        <h1 class="mb-4">โพสต์ทั้งหมด</h1>
+        <a href="/" class="btn btn-primary mb-3">กลับหน้าแรก</a>
+        
+        <div class="list-group">
+            <% posts.forEach(post => { %>
+                <div class="list-group-item mb-3">
+                    <h5 class="mb-1"><%= post.description %></h5>
+                    <p class="mb-1"><strong>สถานที่:</strong> <%= post.location %></p>
+                    <p class="mb-1"><strong>ผู้โพสต์:</strong> <%= post.user.username %></p>
+                    <p class="mb-1"><strong>เวลาที่พบ:</strong> <%= new Date(post.found_time).toLocaleString('th-TH', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    }) %></p>
+                    <% if (post.contact_info) { %>
+                        <p class="mb-1"><strong>ข้อมูลติดต่อ:</strong> <%= post.contact_info %></p>
+                    <% } %>
+                    <% if (post.image) { %>
+                        <img src="/uploads/<%= post.image %>" alt="โพสต์รูปภาพ" class="post-image">
+                    <% } %>
+                </div>
+            <% }) %>
+        </div>
+
+        <% if (posts.length === 0) { %>
+            <div class="alert alert-info">ยังไม่มีโพสต์ในขณะนี้</div>
+        <% } %>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
