@@ -1,78 +1,50 @@
-const path = require('path');
-const { check, validationResult } = require('express-validator');
 const express = require('express');
-const multer = require('multer');
-const rateLimit = require('express-rate-limit');
 const mysql = require('mysql');
 const session = require('express-session');
-const helmet = require('helmet');
-const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
+const { check, validationResult } = require('express-validator');
+const multer = require('multer');
+const path = require('path');
 
 const app = express();
 
-// Security middleware
-app.use(helmet());
-
-// Rate limiting middleware
-const loginLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5 // limit each IP to 5 requests per windowMs
-});
-
-// Set up EJS
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
-// Serve static files and use body-parser
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-// Session configuration
-app.use(session({
-    secret: 'your_secret_key',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false } // set to true if using https
-}));
-
-// Multer configuration for file uploads
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'public/uploads/')
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname))
-    }
-});
-
-const upload = multer({
-    storage: storage,
-    fileFilter: function (req, file, cb) {
-        if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-            return cb(new Error('Only image files are allowed!'), false);
-        }
-        cb(null, true);
-    }
-});
-
-// Create MySQL connection
+// กำหนดค่า MySQL connection
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'lost_found_system',
+    database: 'lost_found_system'
 });
 
-// Connect to the database
-db.connect(err => {
+// เชื่อมต่อกับ MySQL
+db.connect((err) => {
     if (err) {
-        console.error('Database connection error:', err);
-        return;
+        throw err;
     }
-    console.log('Connected to MySQL database!');
+    console.log('Connected to MySQL database');
 });
+
+// Middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
+app.set('view engine', 'ejs');
+app.use(session({
+    secret: 'your_secret_key',
+    resave: false,
+    saveUninitialized: true
+}));
+
+// Multer configuration for file uploads
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
 
 // Middleware to check if user is logged in
 const isAuthenticated = (req, res, next) => {
@@ -83,7 +55,7 @@ const isAuthenticated = (req, res, next) => {
     }
 };
 
-// Route for the index page (main page)
+// Routes
 app.get('/', (req, res) => {
     const query = `
         SELECT posts.*, users.username 
@@ -100,7 +72,8 @@ app.get('/', (req, res) => {
         res.render('index', {
             posts: results,
             username: req.session.username,
-            userId: req.session.userId
+            userId: req.session.userId,
+            isAdmin: req.session.isAdmin
         });
     });
 });
@@ -109,193 +82,191 @@ app.get('/register', (req, res) => {
     res.render('register');
 });
 
-app.get('/login', (req, res) => {
-    res.render('login', { error: null });
-});
-
 app.post('/register', [
     check('username').notEmpty().withMessage('Username is required'),
-    check('password').notEmpty().withMessage('Password is required'),
-], (req, res) => {
+    check('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+  ], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.render('register', { error: errors.array()[0].msg });
+      return res.render('register', { errors: errors.array() });
     }
-
+  
     const { username, password } = req.body;
-
-    bcrypt.hash(password, 10, (err, hash) => {
+    
+    // ตรวจสอบว่ามีชื่อผู้ใช้นี้อยู่แล้วหรือไม่
+    const checkUserQuery = 'SELECT * FROM users WHERE username = ?';
+    db.query(checkUserQuery, [username], (err, results) => {
+      if (err) {
+        console.error('Database error:', err);
+        return res.render('register', { error: 'An error occurred. Please try again.' });
+      }
+      
+      if (results.length > 0) {
+        return res.render('register', { error: 'Username already exists. Please choose a different username.' });
+      }
+      
+      // ถ้าไม่มีชื่อผู้ใช้นี้ ให้ทำการสมัครสมาชิก
+      const insertUserQuery = 'INSERT INTO users (username, password) VALUES (?, ?)';
+      db.query(insertUserQuery, [username, password], (err, result) => {
         if (err) {
-            console.error('Error hashing password:', err);
-            return res.render('register', { error: 'Error hashing password' });
+          console.error('Database error:', err);
+          return res.render('register', { error: 'An error occurred. Please try again.' });
         }
-        const query = 'INSERT INTO users (username, password) VALUES (?)';
-
-        db.query('SELECT * FROM users WHERE username = ?', [username], (err, result) => {
-            if (err) {
-                console.error('Database query error:', err);
-                return res.render('register', { error: 'Database query error' });
-            }
-            if (result.length > 0) {
-                return res.render('register', { error: 'Username already exists' });
-            } else {
-                db.query(query, [[username, hash]], err => {
-                    if (err) {
-                        console.error('Database insert error:', err);
-                        return res.render('register', { error: 'Database insert error' });
-                    }
-                    res.redirect('/login');
-                });
-            }
-        });
+        res.redirect('/login');
+      });
     });
+  });
+
+app.get('/login', (req, res) => {
+    res.render('login');
 });
 
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
+    const query = 'SELECT * FROM users WHERE username = ?';
+    
+    db.query(query, [username], (err, results) => {
+      if (err) {
+        console.error('Database error:', err);
+        return res.render('login', { error: 'An error occurred. Please try again.' });
+      }
+      
+      if (results.length === 0) {
+        return res.render('login', { error: 'Invalid username or password.' });
+      }
+      
+      const user = results[0];
+      if (password !== user.password) {
+        return res.render('login', { error: 'Invalid username or password.' });
+      }
+      
+      req.session.userId = user.id;
+      req.session.username = user.username;
+      req.session.isAdmin = user.is_admin === 1;
+      res.redirect('/');
+    });
+  });
 
-    db.query('SELECT * FROM users WHERE username = ?', [username], (err, results) => {
+app.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
         if (err) {
-            console.error(err);
-            return res.render('login', { error: 'An error occurred. Please try again.' });
+            console.error('Error destroying session:', err);
         }
-
-        if (results.length === 0) {
-            return res.render('login', { error: 'Invalid username or password' });
-        }
-
-        const user = results[0];
-
-        bcrypt.compare(password, user.password, (err, isMatch) => {
-            if (err) {
-                console.error(err);
-                return res.render('login', { error: 'An error occurred. Please try again.' });
-            }
-
-            if (!isMatch) {
-                return res.render('login', { error: 'Invalid username or password' });
-            }
-
-            req.session.userId = user.id;
-            req.session.username = user.username;
-            res.redirect('/');
-        });
+        res.redirect('/');
     });
 });
 
 app.get('/create-post', isAuthenticated, (req, res) => {
-    res.render('create-post', { username: req.session.username });
+    res.render('create-post');
 });
 
-app.post('/create-post', isAuthenticated, upload.single('image'), [
-    check('item_description').notEmpty().withMessage('Item description is required'),
-    check('location').notEmpty().withMessage('Location is required'),
-    check('found_time').notEmpty().withMessage('Found time is required'),
-    check('post_type').notEmpty().withMessage('Post type is required'),
-    check('contact_info').notEmpty().withMessage('Contact information is required'),
-], (req, res) => {
-    if (!req.session.userId) {
-        return res.status(401).send('Unauthorized. Please login again.');
-    }
-
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).send(errors.array());
-    }
-
-    const { item_description, location, found_time, post_type, contact_info } = req.body;
+app.post('/create-post', isAuthenticated, upload.single('image'), (req, res) => {
+    const { item_description, location, found_time } = req.body;
+    const user_id = req.session.userId;
     const image = req.file ? req.file.filename : null;
 
-    if (!image) {
-        return res.status(400).send('Error: No file uploaded or file type not supported.');
-    }
+    const post = {
+        item_description,
+        location,
+        found_time,
+        user_id,
+        image,
+        contact_info,
+        status: 'searching'
+    };
 
-    const query = 'INSERT INTO posts (user_id, item_description, location, image, found_time, status, post_type, contact_info) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    db.query(query, [req.session.userId, item_description, location, image, found_time, 'searching', post_type, contact_info], (err) => {
+    db.query('INSERT INTO posts SET ?', post, (err, result) => {
         if (err) {
             console.error('Database insert error:', err);
-            return res.status(500).send('Database insert error: ' + err.message);
+            return res.status(500).send('Error creating post');
         }
         res.redirect('/');
     });
 });
 
-app.post('/update-status/:id', isAuthenticated, async (req, res) => {
+// Update post status route
+app.post('/update-status/:id', isAuthenticated, (req, res) => {
     const postId = req.params.id;
-    const newStatus = req.body.newStatus;
+    const { newStatus } = req.body;
 
-    if (!['searching', 'found', 'unclaimed'].includes(newStatus)) {
+    if (!['searching', 'found', 'closed'].includes(newStatus)) {
         return res.status(400).send('Invalid status');
     }
 
-    try {
-        const post = await getPost(postId);
-
-        if (post.user_id !== req.session.userId) {
-            return res.status(403).send('Not authorized to update this post');
+    const query = 'UPDATE posts SET status = ? WHERE id = ?';
+    db.query(query, [newStatus, postId], (err, result) => {
+        if (err) {
+            console.error('Database update error:', err);
+            return res.status(500).send('Error updating post status');
         }
-
-        const query = 'UPDATE posts SET status = ? WHERE id = ?';
-        db.query(query, [newStatus, postId], (err, result) => {
-            if (err) {
-                console.error('Database update error:', err);
-                return res.status(500).send('Database update error');
-            }
-            if (result.affectedRows === 0) {
-                return res.status(404).send('Post not found');
-            }
-            res.redirect('/');
-        });
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).send('Server error');
-    }
+        if (result.affectedRows === 0) {
+            return res.status(404).send('Post not found');
+        }
+        res.redirect('back'); // เปลี่ยนจาก '/admin-dashboard' เป็น 'back'
+    });
 });
 
+// Delete post route
 app.post('/delete-post/:id', isAuthenticated, (req, res) => {
     const postId = req.params.id;
-    const userId = req.session.userId;
 
-    const query = 'SELECT * FROM posts WHERE id = ? AND user_id = ?';
-    db.query(query, [postId, userId], (err, results) => {
+    const query = 'DELETE FROM posts WHERE id = ?';
+    db.query(query, [postId], (err, result) => {
         if (err) {
-            console.error('Database query error:', err);
-            return res.status(500).json({ message: 'Internal server error' });
+            console.error('Database delete error:', err);
+            return res.status(500).send('Error deleting post');
         }
-
-        if (results.length === 0) {
-            return res.status(403).json({ message: 'Not authorized to delete this post' });
+        if (result.affectedRows === 0) {
+            return res.status(404).send('Post not found');
         }
-
-        const deleteQuery = 'DELETE FROM posts WHERE id = ?';
-        db.query(deleteQuery, [postId], (deleteErr, deleteResult) => {
-            if (deleteErr) {
-                console.error('Error deleting post:', deleteErr);
-                return res.status(500).json({ message: 'Error deleting post' });
-            }
-
-            res.redirect('/');
-        });
+        res.redirect('back'); // เปลี่ยนจาก '/admin-dashboard' เป็น 'back'
     });
 });
 
-async function getPost(postId) {
-    return new Promise((resolve, reject) => {
-        const query = 'SELECT * FROM posts WHERE id = ?';
-        db.query(query, [postId], (err, results) => {
-            if (err) reject(err);
-            resolve(results[0]);
-        });
-    });
-}
+// View post details route
+app.get('/view-details/:id', (req, res) => {
+    const postId = req.params.id;
 
-app.get('/logout', (req, res) => {
-    req.session.destroy(err => {
+    const query = `
+        SELECT posts.*, users.username 
+        FROM posts 
+        JOIN users ON posts.user_id = users.id 
+        WHERE posts.id = ?
+    `;
+    db.query(query, [postId], (err, results) => {
         if (err) {
-            console.error('Error destroying session:', err);
-            return res.status(500).send('Error logging out');
+            console.error('Database query error:', err);
+            return res.status(500).send('Error fetching post details');
         }
-        res.redirect('/');
+        if (results.length === 0) {
+            return res.status(404).send('Post not found');
+        }
+        res.render('post-details', { post: results[0] });
+    });
+});
+
+// Admin dashboard route
+app.get('/admin-dashboard', isAuthenticated, (req, res) => {
+    if (!req.session.isAdmin) {
+        return res.status(403).send('Access denied');
+    }
+
+    const query = `
+        SELECT posts.*, users.username 
+        FROM posts 
+        JOIN users ON posts.user_id = users.id 
+        ORDER BY posts.id DESC
+    `;
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Database query error:', err);
+            return res.status(500).send('Error fetching posts');
+        }
+        res.render('admin-dashboard', { 
+            posts: results,
+            username: req.session.username,
+            isAdmin: req.session.isAdmin
+        });
     });
 });
 

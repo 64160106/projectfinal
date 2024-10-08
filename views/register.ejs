@@ -24,13 +24,20 @@
 
     <div class="container mt-5">
         <h2 class="text-center">Register</h2>
-        
         <% if (typeof error !== 'undefined' && error) { %>
             <div class="alert alert-danger w-50 mx-auto" role="alert">
                 <%= error %>
             </div>
         <% } %>
-        
+        <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+            <div class="alert alert-danger w-50 mx-auto" role="alert">
+                <ul>
+                    <% errors.forEach(function(error) { %>
+                        <li><%= error.msg %></li>
+                    <% }); %>
+                </ul>
+            </div>
+        <% } %>
         <form action="/register" method="POST" class="w-50 mx-auto">
             <div class="form-group">
                 <label for="username">Username:</label>
@@ -49,11 +56,4 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
-</html>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-
 </html>

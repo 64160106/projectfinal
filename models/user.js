@@ -10,7 +10,12 @@ const User = sequelize.define('User', {
     password: {
         type: DataTypes.STRING,
         allowNull: false
-    }
+    },
+    // add new field
+    isAdmin: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+      }
 });
 
 // เพิ่มความสัมพันธ์กับ Post
