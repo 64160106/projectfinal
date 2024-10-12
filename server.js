@@ -55,16 +55,48 @@ const isAuthenticated = (req, res, next) => {
     }
 };
 
+
+
+function isAdmin(req, res, next) {
+    if (req.session.isAdmin) {
+        next();
+    } else {
+        res.status(403).send('Access denied. Admin only.');
+    }
+}
+
 // Routes
 app.get('/', (req, res) => {
-    const query = `
+    const { search, type, status, date } = req.query;
+    let query = `
         SELECT posts.*, users.username 
         FROM posts 
         JOIN users ON posts.user_id = users.id 
-        WHERE posts.status = 'searching' 
-        ORDER BY posts.id DESC
+        WHERE 1=1
     `;
-    db.query(query, (err, results) => {
+    const queryParams = [];
+
+    if (search) {
+        query += ` AND (posts.item_description LIKE ? OR posts.location LIKE ? OR users.username LIKE ? OR posts.contact_info LIKE ?)`;
+        const searchTerm = `%${search}%`;
+        queryParams.push(searchTerm, searchTerm, searchTerm, searchTerm);
+    }
+    if (type) {
+        query += ` AND posts.post_type = ?`;
+        queryParams.push(type);
+    }
+    if (status) {
+        query += ` AND posts.status = ?`;
+        queryParams.push(status);
+    }
+    if (date) {
+        query += ` AND DATE(posts.found_time) = ?`;
+        queryParams.push(date);
+    }
+
+    query += ` ORDER BY posts.id DESC`;
+
+    db.query(query, queryParams, (err, results) => {
         if (err) {
             console.error('Database query error:', err);
             return res.status(500).send('Database query error');
@@ -73,7 +105,11 @@ app.get('/', (req, res) => {
             posts: results,
             username: req.session.username,
             userId: req.session.userId,
-            isAdmin: req.session.isAdmin
+            isAdmin: req.session.isAdmin,
+            searchQuery: search,
+            searchType: type,
+            searchStatus: status,
+            searchDate: date
         });
     });
 });
@@ -161,7 +197,7 @@ app.get('/create-post', isAuthenticated, (req, res) => {
 });
 
 app.post('/create-post', isAuthenticated, upload.single('image'), (req, res) => {
-    const { item_description, location, found_time } = req.body;
+    const { item_description, location, found_time, contact_info } = req.body;
     const user_id = req.session.userId;
     const image = req.file ? req.file.filename : null;
 
@@ -186,25 +222,27 @@ app.post('/create-post', isAuthenticated, upload.single('image'), (req, res) => 
 
 // Update post status route
 app.post('/update-status/:id', isAuthenticated, (req, res) => {
-    const postId = req.params.id;
+    const { id } = req.params;
     const { newStatus } = req.body;
-
-    if (!['searching', 'found', 'closed'].includes(newStatus)) {
-        return res.status(400).send('Invalid status');
+    
+    // ตรวจสอบว่า newStatus เป็นค่าที่ถูกต้อง
+    const validStatuses = ['searching', 'found', 'unclaimed'];
+    if (!validStatuses.includes(newStatus)) {
+      return res.status(400).send('Invalid status');
     }
-
-    const query = 'UPDATE posts SET status = ? WHERE id = ?';
-    db.query(query, [newStatus, postId], (err, result) => {
-        if (err) {
-            console.error('Database update error:', err);
-            return res.status(500).send('Error updating post status');
-        }
-        if (result.affectedRows === 0) {
-            return res.status(404).send('Post not found');
-        }
-        res.redirect('back'); // เปลี่ยนจาก '/admin-dashboard' เป็น 'back'
+  
+    const query = 'UPDATE posts SET status = ? WHERE id = ? AND user_id = ?';
+    db.query(query, [newStatus, id, req.session.userId], (err, result) => {
+      if (err) {
+        console.error('Database error:', err);
+        return res.status(500).send('An error occurred while updating the post.');
+      }
+      if (result.affectedRows === 0) {
+        return res.status(404).send('Post not found or you do not have permission to update it.');
+      }
+      res.redirect('/');
     });
-});
+  });
 
 // Delete post route
 app.post('/delete-post/:id', isAuthenticated, (req, res) => {
@@ -267,6 +305,71 @@ app.get('/admin-dashboard', isAuthenticated, (req, res) => {
             username: req.session.username,
             isAdmin: req.session.isAdmin
         });
+    });
+});
+
+app.post('/admin/update-status/:id', isAuthenticated, isAdmin, (req, res) => {
+    const postId = req.params.id;
+    const { newStatus } = req.body;
+
+    if (!['searching', 'found', 'unclaimed'].includes(newStatus)) {
+        return res.status(400).send('Invalid status');
+    }
+
+    const query = 'UPDATE posts SET status = ? WHERE id = ?';
+    db.query(query, [newStatus, postId], (err, result) => {
+        if (err) {
+            console.error('Database update error:', err);
+            return res.status(500).send('Error updating post status');
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).send('Post not found');
+        }
+        res.redirect('/admin-dashboard');
+    });
+});
+
+app.get('/search', (req, res) => {
+    const { query } = req.query;
+    const searchQuery = `
+        SELECT posts.*, users.username 
+        FROM posts 
+        JOIN users ON posts.user_id = users.id 
+        WHERE posts.status = 'searching' 
+        AND (posts.item_description LIKE ? OR posts.location LIKE ?)
+        ORDER BY posts.id DESC
+    `;
+    const searchTerm = `%${query}%`;
+    db.query(searchQuery, [searchTerm, searchTerm], (err, results) => {
+        if (err) {
+            console.error('Database query error:', err);
+            return res.status(500).send('Database query error');
+        }
+        res.render('index', {
+            posts: results,
+            username: req.session.username,
+            userId: req.session.userId,
+            isAdmin: req.session.isAdmin,
+            searchQuery: query
+        });
+    });
+});
+
+// เพิ่มเส้นทางนี้ในไฟล์ server.js
+app.post('/admin/edit-post/:id', isAuthenticated, (req, res) => {
+    const postId = req.params.id;
+    const { item_description, location, status, contact_info, found_time } = req.body;
+
+    const query = 'UPDATE posts SET item_description = ?, location = ?, status = ?, contact_info = ?, found_time = ? WHERE id = ?';
+    db.query(query, [item_description, location, status, contact_info, found_time, postId], (err, result) => {
+        if (err) {
+            console.error('Database update error:', err);
+            return res.status(500).send('Error updating post');
+        }
+        if (result.affectedRows === 0) {
+            return res.status(404).send('Post not found');
+        }
+        res.redirect('/admin-dashboard');
     });
 });
 

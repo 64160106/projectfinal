@@ -1,6 +1,6 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
     margin: 0;
     padding: 0;
 }
@@ -10,6 +10,7 @@ header {
     color: white;
     padding: 20px;
     text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
 }
 
 nav ul {
@@ -29,11 +30,11 @@ nav a {
 
 main {
     padding: 20px;
-    max-width: 600px;
+    max-width: 1200px;
     margin: 20px auto;
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .form-group {
@@ -47,11 +48,22 @@ label {
 }
 
 input[type="text"],
-textarea {
+input[type="date"],
+textarea,
+select {
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 20px;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #007BFF;
 }
 
 textarea {
@@ -65,10 +77,11 @@ input[type="file"] {
 button {
     background-color: #007BFF;
     color: white;
-    padding: 10px 15px;
+    padding: 10px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 20px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 button:hover {
@@ -83,4 +96,249 @@ footer {
     position: absolute;
     bottom: 0;
     width: 100%;
+}
+
+.card {
+    height: 100%;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,.1);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0,0,0,.15);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.status-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.search-form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,.1);
+    margin-bottom: 30px;
+}
+
+.search-form .form-control {
+    border-radius: 20px;
+}
+
+.search-form .btn {
+    border-radius: 20px;
+    padding: 10px 20px;
+}
+
+.update-form {
+    display: flex;
+    align-items: center;
+}
+
+.update-form select {
+    margin-right: 5px;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+/* เพิ่มสไตล์ต่อไปนี้ต่อจากโค้ดที่มีอยู่แล้ว */
+
+body {
+    background-color: #f8f9fa;
+}
+
+.container {
+    background-color: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+h1 {
+    color: #007BFF;
+    margin-bottom: 30px;
+}
+
+.form-group label {
+    font-weight: bold;
+    color: #495057;
+}
+
+.btn-primary {
+    background-color: #007BFF;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* สไตล์สำหรับหน้า create-post */
+.create-post-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.create-post-form textarea {
+    resize: vertical;
+}
+
+.create-post-form .btn-submit {
+    margin-top: 20px;
+}
+
+/* สไตล์สำหรับ navbar */
+.navbar {
+    margin-bottom: 30px;
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.nav-link {
+    color: #495057;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: #007BFF;
+}
+
+/* สไตล์สำหรับ footer ที่คุณมีอยู่แล้ว */
+footer {
+    background-color: #333;
+    color: white;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+/* เพิ่มสไตล์ต่อไปนี้ต่อจากโค้ดที่มีอยู่แล้ว */
+
+/* สไตล์สำหรับ Admin Dashboard */
+.admin-dashboard {
+    background-color: #f8f9fa;
+    padding: 30px 0;
+}
+
+.admin-dashboard h1 {
+    color: #007bff;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.admin-dashboard h2 {
+    color: #343a40;
+    margin-bottom: 20px;
+}
+
+.admin-dashboard .table {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.admin-dashboard .table thead th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.admin-dashboard .btn {
+    margin-right: 5px;
+}
+
+.admin-dashboard .btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.admin-dashboard .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.admin-dashboard .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* สไตล์สำหรับ Modal */
+.modal-content {
+    border-radius: 10px;
+}
+
+.modal-header {
+    background-color: #007bff;
+    color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.modal-title {
+    font-weight: bold;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    border-top: none;
+}
+
+/* ปรับขนาดของ select ใน form */
+.form-control-sm {
+    height: calc(1.5em + 0.5rem + 2px);
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+}
+
+/* ปรับขนาดของปุ่มใน form */
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+}
+
+/* ปรับ layout ของ form ใน modal */
+.modal-body .form-group {
+    margin-bottom: 15px;
+}
+
+.modal-body label {
+    font-weight: bold;
+    color: #495057;
+}
+
+/* สไตล์สำหรับรูปภาพใน modal */
+.modal-body .img-fluid {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

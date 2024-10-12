@@ -35,3 +35,30 @@ exports.getAllPosts = async (req, res) => {
     res.status(500).send('Error fetching posts');
   }
 };
+
+router.post('/update-status/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { newStatus } = req.body;
+
+    // เพิ่ม 'unclaimed' ในรายการสถานะที่ยอมรับ
+    const validStatuses = ['searching', 'found', 'unclaimed'];
+
+    if (!validStatuses.includes(newStatus)) {
+      return res.status(400).json({ error: 'Invalid status' });
+    }
+
+    const post = await Post.findByPk(id);
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    post.status = newStatus;
+    await post.save();
+
+    res.redirect('/');
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});

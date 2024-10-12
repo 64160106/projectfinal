@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -36,6 +37,7 @@
                         <th>Location</th>
                         <th>Posted by</th>
                         <th>Status</th>
+                        <th>Contact Info</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -51,7 +53,7 @@
                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detailModal<%= post.id %>">
                                     Details
                                 </button>
-                                <form action="/update-status/<%= post.id %>" method="POST" class="d-inline">
+                                <form action="/admin/update-status/<%= post.id %>" method="POST" class="d-inline">
                                     <select name="newStatus" class="form-control form-control-sm d-inline-block w-auto mr-2">
                                         <option value="searching" <%= post.status === 'searching' ? 'selected' : '' %>>Searching</option>
                                         <option value="found" <%= post.status === 'found' ? 'selected' : '' %>>Found</option>
@@ -64,8 +66,8 @@
                                 </form>
                             </td>
                         </tr>
-
-                        <!-- Modal for post details -->
+                        
+                        <!-- Modal for post details and edit -->
                         <div class="modal fade" id="detailModal<%= post.id %>" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel<%= post.id %>" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
@@ -76,14 +78,43 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <p><strong>Description:</strong> <%= post.item_description %></p>
-                                        <p><strong>Location:</strong> <%= post.location %></p>
-                                        <p><strong>Posted by:</strong> <%= post.username %></p>
-                                        <p><strong>Status:</strong> <%= post.status %></p>
-                                        <p><strong>Found Time:</strong> <%= new Date(post.found_time).toLocaleString() %></p>
-                                        <% if (post.image) { %>
-                                            <img src="/uploads/<%= post.image %>" alt="Post Image" class="img-fluid">
-                                        <% } %>
+                                        <form action="/admin/edit-post/<%= post.id %>" method="POST">
+                                            <div class="form-group">
+                                                <label for="item_description">Description:</label>
+                                                <input type="text" class="form-control" id="item_description" name="item_description" value="<%= post.item_description %>" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="location">Location:</label>
+                                                <input type="text" class="form-control" id="location" name="location" value="<%= post.location %>" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="username">Posted by:</label>
+                                                <input type="text" class="form-control" id="username" name="username" value="<%= post.username %>" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="status">Status:</label>
+                                                <select class="form-control" id="status" name="status">
+                                                    <option value="searching" <%= post.status === 'searching' ? 'selected' : '' %>>Searching</option>
+                                                    <option value="found" <%= post.status === 'found' ? 'selected' : '' %>>Found</option>
+                                                    <option value="unclaimed" <%= post.status === 'unclaimed' ? 'selected' : '' %>>Unclaimed</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="contact_info">Contact Info:</label>
+                                                <input type="text" class="form-control" id="contact_info" name="contact_info" value="<%= post.contact_info %>">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="found_time">Found Time:</label>
+                                                <input type="datetime-local" class="form-control" id="found_time" name="found_time" value="<%= new Date(post.found_time).toISOString().slice(0, 16) %>" required>
+                                            </div>
+                                            <% if (post.image) { %>
+                                                <div class="form-group">
+                                                    <label>Current Image:</label>
+                                                    <img src="/uploads/<%= post.image %>" alt="Post Image" class="img-fluid">
+                                                </div>
+                                            <% } %>
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        </form>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

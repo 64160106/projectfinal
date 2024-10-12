@@ -84,24 +84,27 @@
         <form class="search-form" action="/" method="GET">
             <div class="form-row">
                 <div class="col-md-3 mb-3">
-                    <input type="text" class="form-control" name="search" placeholder="Search posts...">
+                    <input type="text" class="form-control" name="search" placeholder="Search by item, location, username, or contact" value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-md-2 mb-3">
                     <select class="form-control" name="type">
                         <option value="">All Types</option>
-                        <option value="lost">Lost</option>
-                        <option value="found">Found</option>
+                        <option value="lost" <%= typeof searchType !== 'undefined' && searchType === 'lost' ? 'selected' : '' %>>Lost</option>
+                        <option value="found" <%= typeof searchType !== 'undefined' && searchType === 'found' ? 'selected' : '' %>>Found</option>
                     </select>
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-md-2 mb-3">
                     <select class="form-control" name="status">
                         <option value="">All Statuses</option>
-                        <option value="searching">Searching</option>
-                        <option value="found">Found</option>
-                        <option value="unclaimed">Unclaimed</option>
+                        <option value="searching" <%= typeof searchStatus !== 'undefined' && searchStatus === 'searching' ? 'selected' : '' %>>Searching</option>
+                        <option value="found" <%= typeof searchStatus !== 'undefined' && searchStatus === 'found' ? 'selected' : '' %>>Found</option>
+                        <option value="unclaimed" <%= typeof searchStatus !== 'undefined' && searchStatus === 'unclaimed' ? 'selected' : '' %>>Unclaimed</option>
                     </select>
                 </div>
                 <div class="col-md-3 mb-3">
+                    <input type="date" class="form-control" name="date" placeholder="Search by date" value="<%= typeof searchDate !== 'undefined' ? searchDate : '' %>">
+                </div>
+                <div class="col-md-2 mb-3">
                     <button type="submit" class="btn btn-primary btn-block">Search</button>
                 </div>
             </div>
@@ -116,7 +119,7 @@
                                 <span class="badge badge-<%= post.post_type === 'lost' ? 'danger' : 'success' %>">
                                     <%= post.post_type === 'lost' ? 'Lost' : 'Found' %>
                                 </span>
-                                <span class="float-right status-badge badge badge-<%= post.status === 'searching' ? 'warning' : (post.status === 'found' ? 'success' : 'secondary') %>">
+                                <span class="float-right status-badge badge badge-<%= post.status === 'searching' ? 'warning' : (post.status === 'found' ? 'success' : (post.status === 'unclaimed' ? 'info' : 'secondary')) %>">
                                     <%= post.status %>
                                 </span>
                             </div>

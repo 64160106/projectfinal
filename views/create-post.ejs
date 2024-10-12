@@ -37,23 +37,23 @@
             </div>
             <div class="form-group">
                 <label for="item_description">Item Description</label>
-                <input type="text" class="form-control" id="item_description" name="item_description" required>
+                <textarea class="form-control" id="item_description" name="item_description" required></textarea>
             </div>
             <div class="form-group">
                 <label for="location">Location</label>
                 <input type="text" class="form-control" id="location" name="location" required>
             </div>
             <div class="form-group">
-                <label for="contact_info">Contact Information:</label>
+                <label for="contact_info">Contact Information</label>
                 <input type="text" class="form-control" id="contact_info" name="contact_info" required>
-              </div>
+            </div>
             <div class="form-group">
                 <label for="found_time">Date & Time</label>
                 <input type="datetime-local" class="form-control" id="found_time" name="found_time" required>
             </div>
             <div class="form-group">
                 <label for="image">Upload Image</label>
-                <input type="file" class="form-control-file" id="image" name="image" accept="image/*" required>
+                <input type="file" class="form-control-file" id="image" name="image" accept="image/*">
             </div>
             <button type="submit" class="btn btn-primary">Create Post</button>
         </form>
@@ -62,5 +62,29 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.querySelector('form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/create-post', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.details || 'Unknown error occurred');
+                }
+
+                window.location.href = '/';
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while creating the post: ' + error.message);
+            }
+        });
+    </script>
 </body>
 </html>
