@@ -24,11 +24,6 @@
 
     <div class="container mt-5">
         <h2 class="text-center">Register</h2>
-        <% if (typeof error !== 'undefined' && error) { %>
-            <div class="alert alert-danger w-50 mx-auto" role="alert">
-                <%= error %>
-            </div>
-        <% } %>
         <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
             <div class="alert alert-danger w-50 mx-auto" role="alert">
                 <ul>
@@ -36,6 +31,11 @@
                         <li><%= error.msg %></li>
                     <% }); %>
                 </ul>
+            </div>
+        <% } %>
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="alert alert-danger w-50 mx-auto" role="alert">
+                <%= error %>
             </div>
         <% } %>
         <form action="/register" method="POST" class="w-50 mx-auto">
