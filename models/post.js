@@ -1,5 +1,9 @@
 const sequelize = require('../db');
+const { DataTypes } = require('sequelize');
 const User = require('./user');
+
+User.hasMany(Post, { foreignKey: 'userId', as: 'posts' });
+Post.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 const Post = sequelize.define('Post', {
   item_description: {
@@ -18,9 +22,15 @@ const Post = sequelize.define('Post', {
     type: sequelize.Sequelize.STRING,
     allowNull: true
   },
+  post_type: {
+    type: DataTypes.ENUM('Found', 'Lost'),
+    allowNull: false
+  },
   status: {
-    type: sequelize.Sequelize.ENUM('searching', 'found', 'unclaimed'),
-    defaultValue: 'searching'
+    type: sequelize.Sequelize.ENUM('Pending', 'Founded', 'Unreceived', 'Received'),
+    defaultValue: function() {
+      return this.post_type === 'Found' ? 'Pending' : 'Unreceived';
+    }
   },
   contact_info: {  // เพิ่มฟิลด์นี้
     type: sequelize.Sequelize.STRING,
@@ -30,4 +40,7 @@ const Post = sequelize.define('Post', {
 
 Post.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
-module.exports = Post;
+module.exports = {
+  User,
+  Post
+};

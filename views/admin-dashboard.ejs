@@ -61,11 +61,15 @@
                                 </button>
                                 <form action="/admin/update-status/<%= post.id %>" method="POST" class="d-inline">
                                     <select name="newStatus" class="form-control form-control-sm d-inline-block w-auto mr-2">
-                                        <option value="searching" <%= post.status === 'searching' ? 'selected' : '' %>>Searching</option>
-                                        <option value="found" <%= post.status === 'found' ? 'selected' : '' %>>Found</option>
-                                        <option value="unclaimed" <%= post.status === 'unclaimed' ? 'selected' : '' %>>Unclaimed</option>
+                                        <% if (post.post_type === 'Found') { %>
+                                            <option value="Pending" <%= post.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                            <option value="Founded" <%= post.status === 'Founded' ? 'selected' : '' %>>Founded</option>
+                                        <% } else { %>
+                                            <option value="Unreceived" <%= post.status === 'Unreceived' ? 'selected' : '' %>>Unreceived</option>
+                                            <option value="Received" <%= post.status === 'Received' ? 'selected' : '' %>>Received</option>
+                                        <% } %>
                                     </select>
-                                    <button type="submit" class="btn btn-success btn-sm">Update</button>
+                                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
                                 </form>
                                 <form action="/admin/delete-post/<%= post.id %>" method="POST" class="d-inline ml-2" onsubmit="return confirm('Are you sure you want to delete this post?');">
                                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>

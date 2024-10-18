@@ -93,9 +93,9 @@ app.get('/', (req, res) => {
     }
     
     if (searchType) {
-      query += ` AND posts.post_type = ?`;
-      countQuery += ` AND posts.post_type = ?`;
-      queryParams.push(searchType);
+        query += ` AND posts.post_type = ?`;
+        countQuery += ` AND posts.post_type = ?`;
+        queryParams.push(searchType);
     }
     
     if (searchStatus) {
@@ -213,7 +213,8 @@ app.get('/create-post', isAuthenticated, (req, res) => {
 app.post('/create-post', isAuthenticated, upload.single('image'), [
     check('item_description').notEmpty().withMessage('Item description is required'),
     check('location').notEmpty().withMessage('Location is required'),
-    check('found_time').notEmpty().withMessage('Found time is required')
+    check('found_time').notEmpty().withMessage('Found time is required'),
+    check('post_type').isIn(['Found', 'Lost']).withMessage('Invalid post type')
 ], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -222,6 +223,8 @@ app.post('/create-post', isAuthenticated, upload.single('image'), [
 
     const { item_description, location, found_time, contact_info, post_type } = req.body;
     const image = req.file ? req.file.filename : null;
+    const initialStatus = post_type === 'Found' ? 'Pending' : 'Unreceived';
+
     const post = {
         item_description,
         location,
@@ -229,18 +232,45 @@ app.post('/create-post', isAuthenticated, upload.single('image'), [
         contact_info,
         image,
         user_id: req.session.userId,
-        post_type
+        post_type,
+        status: initialStatus
     };
 
     db.query('INSERT INTO posts SET ?', post, (err, result) => {
-        if (err) throw err;
-        res.redirect('/');
+        if (err) {
+            console.error('Error creating post:', err);
+            if (err.code === 'ER_DUP_ENTRY') {
+                return res.status(400).json({ error: 'Duplicate entry. This post already exists.' });
+            }
+            return res.status(500).json({ error: 'An error occurred while creating the post. Please try again later.' });
+        }
+
+        if (result && result.affectedRows > 0) {
+            console.log('Post created successfully:', result);
+            return res.redirect('/');
+        } else {
+            console.error('Post creation failed. No rows affected.');
+            return res.status(500).json({ error: 'Failed to create post. Please try again.' });
+        }
     });
 });
 
 app.post('/update-status/:id', isAuthenticated, (req, res) => {
     const postId = req.params.id;
-    const { status } = req.body;
+    const { status, post_type } = req.body;
+    const newStatus = req.body.newStatus;
+
+    let validStatus;
+    if (post_type === 'Found') {
+        validStatus = ['Pending', 'Founded'];
+    } else if (post_type === 'Lost') {
+        validStatus = ['Unreceived', 'Received'];
+    }
+
+    if (!validStatus.includes(status)) {
+        return res.status(400).send('Invalid status for this post type');
+    }
+
     db.query('UPDATE posts SET status = ? WHERE id = ?', [status, postId], (err, result) => {
         if (err) throw err;
         res.redirect('/');

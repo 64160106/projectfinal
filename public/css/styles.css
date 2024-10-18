@@ -352,3 +352,9 @@ footer {
     object-fit: cover;
     cursor: pointer;
 }
+
+.status-badge {
+    font-size: 0.9em;
+    font-weight: bold;
+    text-transform: uppercase;
+}

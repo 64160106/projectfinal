@@ -3,23 +3,26 @@ const User = require('../models/user');
 
 exports.createPost = async (req, res) => {
   try {
-    const { item_description, location, found_time, contact_info } = req.body;
+    const { item_description, location, found_time, post_type } = req.body;
     const image = req.file ? req.file.filename : null;
 
+    const status = post_type === 'Found' ? 'Pending' : 'Unreceived';
+
     const newPost = await Post.create({
-      item_description,
-      location,
-      found_time,
-      image,
-      contact_info,
-      userId: req.session.userId
+        item_description,
+        location,
+        found_time,
+        image,
+        post_type,
+        status,
+        userId: req.user.id
     });
 
     res.redirect('/');
-  } catch (error) {
-    console.error('Error creating post:', error);
-    res.status(500).send('Error creating post');
-  }
+} catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+}
 };
 
 exports.getAllPosts = async (req, res) => {
