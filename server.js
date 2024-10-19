@@ -1,5 +1,5 @@
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
 const { check, validationResult } = require('express-validator');
@@ -62,6 +62,22 @@ function isAdmin(req, res, next) {
     } else {
         res.status(403).send('Access denied. Admin only.');
     }
+}
+
+function isPostOwner(req, res, next) {
+    const postId = req.params.id;
+    const userId = req.session.userId;
+
+    db.query('SELECT user_id FROM posts WHERE id = ?', [postId], (err, results) => {
+        if (err) {
+            return res.status(500).send('Database error');
+        }
+        if (results.length > 0 && results[0].user_id === userId) {
+            next();
+        } else {
+            res.status(403).send('You are not authorized to perform this action');
+        }
+    });
 }
 
 // Routes
@@ -214,16 +230,16 @@ app.post('/create-post', isAuthenticated, upload.single('image'), [
     check('item_description').notEmpty().withMessage('Item description is required'),
     check('location').notEmpty().withMessage('Location is required'),
     check('found_time').notEmpty().withMessage('Found time is required'),
-    check('post_type').isIn(['Found', 'Lost']).withMessage('Invalid post type')
+    check('post_type').isIn(['found', 'lost']).withMessage('Invalid post type')
 ], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ success: false, message: 'Validation failed', details: errors.array() });
     }
 
     const { item_description, location, found_time, contact_info, post_type } = req.body;
     const image = req.file ? req.file.filename : null;
-    const initialStatus = post_type === 'Found' ? 'Pending' : 'Unreceived';
+    const initialStatus = post_type === 'found' ? 'Pending' : 'Unreceived';
 
     const post = {
         item_description,
@@ -239,39 +255,44 @@ app.post('/create-post', isAuthenticated, upload.single('image'), [
     db.query('INSERT INTO posts SET ?', post, (err, result) => {
         if (err) {
             console.error('Error creating post:', err);
-            if (err.code === 'ER_DUP_ENTRY') {
-                return res.status(400).json({ error: 'Duplicate entry. This post already exists.' });
-            }
-            return res.status(500).json({ error: 'An error occurred while creating the post. Please try again later.' });
+            return res.status(500).json({ success: false, message: 'An error occurred while creating the post', details: err.message });
         }
 
         if (result && result.affectedRows > 0) {
             console.log('Post created successfully:', result);
-            return res.redirect('/');
+            return res.status(200).json({ success: true, message: 'Post created successfully' });
         } else {
             console.error('Post creation failed. No rows affected.');
-            return res.status(500).json({ error: 'Failed to create post. Please try again.' });
+            return res.status(500).json({ success: false, message: 'Failed to create post' });
         }
     });
 });
 
-app.post('/update-status/:id', isAuthenticated, (req, res) => {
+app.post('/update-status/:id', isAuthenticated, (req, res, next) => {
+    if (req.session.isAdmin) {
+        next();
+    } else {
+        isPostOwner(req, res, next);
+    }
+}, (req, res) => {
     const postId = req.params.id;
-    const { status, post_type } = req.body;
-    const newStatus = req.body.newStatus;
+    const { newStatus } = req.body;
 
-    let validStatus;
-    if (post_type === 'Found') {
-        validStatus = ['Pending', 'Founded'];
-    } else if (post_type === 'Lost') {
-        validStatus = ['Unreceived', 'Received'];
+    db.query('UPDATE posts SET status = ? WHERE id = ?', [newStatus, postId], (err, result) => {
+        if (err) throw err;
+        res.redirect('/');
+    });
+});
+
+app.post('/delete-post/:id', isAuthenticated, (req, res, next) => {
+    if (req.session.isAdmin) {
+        next();
+    } else {
+        isPostOwner(req, res, next);
     }
-
-    if (!validStatus.includes(status)) {
-        return res.status(400).send('Invalid status for this post type');
-    }
-
-    db.query('UPDATE posts SET status = ? WHERE id = ?', [status, postId], (err, result) => {
+}, (req, res) => {
+    const postId = req.params.id;
+    db.query('DELETE FROM posts WHERE id = ?', [postId], (err, result) => {
         if (err) throw err;
         res.redirect('/');
     });
@@ -285,22 +306,20 @@ app.get('/delete-post/:id', isAuthenticated, (req, res) => {
     });
 });
 
-app.get('/admin-dashboard', isAdmin, (req, res) => {
-    console.log("Accessing admin dashboard");
-    db.query('SELECT * FROM users', (err, users) => {
+app.get('/admin-dashboard', isAuthenticated, isAdmin, (req, res) => {
+    const query = `
+        SELECT posts.*, users.username 
+        FROM posts 
+        LEFT JOIN users ON posts.user_id = users.id 
+        ORDER BY posts.created_at DESC
+    `;
+
+    db.query(query, (err, results) => {
         if (err) {
-            console.error("Error fetching users:", err);
-            return res.status(500).send("Internal Server Error");
+            console.error('Error fetching posts:', err);
+            return res.status(500).send('Internal Server Error');
         }
-        console.log("Users fetched:", users.length);
-        db.query('SELECT posts.*, users.username FROM posts INNER JOIN users ON posts.user_id = users.id', (err, posts) => {
-            if (err) {
-                console.error("Error fetching posts:", err);
-                return res.status(500).send("Internal Server Error");
-            }
-            console.log("Posts fetched:", posts.length);
-            res.render('admin-dashboard', { users, posts });
-        });
+        res.render('admin-dashboard', { posts: results });
     });
 });
 
@@ -322,22 +341,29 @@ app.post('/admin-dashboard/delete-post/:id', isAdmin, (req, res) => {
 
 app.post('/admin/edit-post/:id', isAuthenticated, isAdmin, upload.single('image'), (req, res) => {
     const postId = req.params.id;
-    const { item_description, location, status, contact_info, found_time } = req.body;
+    const { post_type, item_description, location, status, contact_info, found_time } = req.body;
 
-    let updateQuery = 'UPDATE posts SET item_description = ?, location = ?, status = ?, contact_info = ?, found_time = ?';
-    let queryParams = [item_description, location, status, contact_info, found_time];
+    let updateQuery = `UPDATE posts SET 
+        post_type = ?,
+        item_description = ?, 
+        location = ?, 
+        status = ?, 
+        contact_info = ?, 
+        found_time = ?`;
+
+    let queryParams = [post_type, item_description, location, status, contact_info, new Date(found_time)];
 
     if (req.file) {
-        updateQuery += ', image = ?';
+        updateQuery += `, image = ?`;
         queryParams.push(req.file.filename);
     }
 
-    updateQuery += ' WHERE id = ?';
+    updateQuery += ` WHERE id = ?`;
     queryParams.push(postId);
 
     db.query(updateQuery, queryParams, (err, result) => {
         if (err) {
-            console.error('Database update error:', err);
+            console.error('Error updating post:', err);
             return res.status(500).send('Error updating post');
         }
         if (result.affectedRows === 0) {
@@ -389,49 +415,64 @@ app.get('/admin-dashboard', async (req, res) => {
     }
   });
 
-  // ในส่วนของ route สำหรับ admin-dashboard
-app.get('/admin-dashboard', isAdmin, (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = 10; // จำนวนโพสต์ต่อหน้า
-    const offset = (page - 1) * limit;
+  app.get('/admin-dashboard', isAdmin, (req, res) => {
+    console.log("Accessing admin dashboard");
+    
+    // รับค่าจาก query parameters
+    const search = req.query.search || '';
+    const type = req.query.type || '';
+    const status = req.query.status || '';
+    const date = req.query.date || '';
 
-    const countQuery = 'SELECT COUNT(*) as total FROM posts';
-    const postsQuery = `
-        SELECT posts.*, users.username 
-        FROM posts 
-        LEFT JOIN users ON posts.user_id = users.id 
-        ORDER BY posts.created_at DESC 
-        LIMIT ? OFFSET ?
-    `;
-    const usersQuery = 'SELECT * FROM users';
+    // สร้าง WHERE clause สำหรับ SQL query
+    let whereClause = '';
+    const queryParams = [];
 
-    db.query(countQuery, (err, countResult) => {
+    if (search) {
+        whereClause += ' AND (posts.item_description LIKE ? OR posts.location LIKE ? OR users.username LIKE ? OR posts.contact_info LIKE ?)';
+        queryParams.push(`%${search}%`, `%${search}%`, `%${search}%`, `%${search}%`);
+    }
+    if (type) {
+        whereClause += ' AND posts.post_type = ?';
+        queryParams.push(type);
+    }
+    if (status) {
+        whereClause += ' AND posts.status = ?';
+        queryParams.push(status);
+    }
+    if (date) {
+        whereClause += ' AND DATE(posts.created_at) = ?';
+        queryParams.push(date);
+    }
+
+    db.query('SELECT * FROM users', (err, users) => {
         if (err) {
-            console.error('Error fetching post count:', err);
-            return res.status(500).send('An error occurred');
+            console.error("Error fetching users:", err);
+            return res.status(500).send("Internal Server Error");
         }
-
-        const totalPosts = countResult[0].total;
-        const totalPages = Math.ceil(totalPosts / limit);
-
-        db.query(postsQuery, [limit, offset], (err, posts) => {
+        console.log("Users fetched:", users.length);
+        
+        const postQuery = `
+            SELECT posts.*, users.username 
+            FROM posts 
+            INNER JOIN users ON posts.user_id = users.id
+            WHERE 1=1 ${whereClause}
+            ORDER BY posts.created_at DESC
+        `;
+        
+        db.query(postQuery, queryParams, (err, posts) => {
             if (err) {
-                console.error('Error fetching posts:', err);
-                return res.status(500).send('An error occurred');
+                console.error("Error fetching posts:", err);
+                return res.status(500).send("Internal Server Error");
             }
-
-            db.query(usersQuery, (err, users) => {
-                if (err) {
-                    console.error('Error fetching users:', err);
-                    return res.status(500).send('An error occurred');
-                }
-
-                res.render('admin-dashboard', {
-                    posts: posts,
-                    users: users,
-                    currentPage: page,
-                    totalPages: totalPages
-                });
+            console.log("Posts fetched:", posts.length);
+            res.render('admin-dashboard', { 
+                users, 
+                posts, 
+                search, 
+                type, 
+                status, 
+                date 
             });
         });
     });
