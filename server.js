@@ -14,7 +14,7 @@ const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'lost_found_system'
+    database: 'lost_and_found'
 });
 
 // เชื่อมต่อกับ MySQL
@@ -415,67 +415,58 @@ app.get('/admin-dashboard', async (req, res) => {
     }
   });
 
-  app.get('/admin-dashboard', isAdmin, (req, res) => {
+  app.get('/admin-dashboard', isAdmin, async (req, res) => {
     console.log("Accessing admin dashboard");
     
-    // รับค่าจาก query parameters
     const search = req.query.search || '';
     const type = req.query.type || '';
     const status = req.query.status || '';
     const date = req.query.date || '';
 
-    // สร้าง WHERE clause สำหรับ SQL query
-    let whereClause = '';
-    const queryParams = [];
+    let whereClause = {};
+    let order = [['createdAt', 'DESC']];
 
     if (search) {
-        whereClause += ' AND (posts.item_description LIKE ? OR posts.location LIKE ? OR users.username LIKE ? OR posts.contact_info LIKE ?)';
-        queryParams.push(`%${search}%`, `%${search}%`, `%${search}%`, `%${search}%`);
+        whereClause[Op.or] = [
+            { item_description: { [Op.like]: `%${search}%` } },
+            { location: { [Op.like]: `%${search}%` } },
+            { contact_info: { [Op.like]: `%${search}%` } },
+            { '$User.username$': { [Op.like]: `%${search}%` } }
+        ];
+        // Move matching results to the top
+        order.unshift([sequelize.literal(`(CASE WHEN item_description LIKE '%${search}%' THEN 0 ELSE 1 END)`), 'ASC']);
     }
     if (type) {
-        whereClause += ' AND posts.post_type = ?';
-        queryParams.push(type);
+        whereClause.post_type = type;
     }
     if (status) {
-        whereClause += ' AND posts.status = ?';
-        queryParams.push(status);
+        whereClause.status = status;
     }
     if (date) {
-        whereClause += ' AND DATE(posts.created_at) = ?';
-        queryParams.push(date);
+        whereClause.found_time = {
+            [Op.gte]: new Date(date),
+            [Op.lt]: new Date(new Date(date).setDate(new Date(date).getDate() + 1))
+        };
     }
 
-    db.query('SELECT * FROM users', (err, users) => {
-        if (err) {
-            console.error("Error fetching users:", err);
-            return res.status(500).send("Internal Server Error");
-        }
-        console.log("Users fetched:", users.length);
-        
-        const postQuery = `
-            SELECT posts.*, users.username 
-            FROM posts 
-            INNER JOIN users ON posts.user_id = users.id
-            WHERE 1=1 ${whereClause}
-            ORDER BY posts.created_at DESC
-        `;
-        
-        db.query(postQuery, queryParams, (err, posts) => {
-            if (err) {
-                console.error("Error fetching posts:", err);
-                return res.status(500).send("Internal Server Error");
-            }
-            console.log("Posts fetched:", posts.length);
-            res.render('admin-dashboard', { 
-                users, 
-                posts, 
-                search, 
-                type, 
-                status, 
-                date 
-            });
+    try {
+        const posts = await Post.findAll({
+            where: whereClause,
+            include: [{ model: User, attributes: ['username'] }],
+            order: order
         });
-    });
+
+        res.render('admin-dashboard', { 
+            posts, 
+            searchQuery: search, 
+            searchType: type, 
+            searchStatus: status, 
+            searchDate: date 
+        });
+    } catch (error) {
+        console.error('Error fetching posts:', error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 const PORT = process.env.PORT || 3000;

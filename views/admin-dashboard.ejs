@@ -31,40 +31,38 @@
     <div class="container mt-4">
         <h1 class="mb-4">Admin Dashboard</h1>
 
-        <form class="search-form" action="/admin-dashboard" method="GET">
+        <form action="/admin-dashboard" method="GET" class="mb-4">
             <div class="form-row">
                 <div class="col-md-3 mb-3">
                     <input type="text" class="form-control" name="search"
-                        placeholder="Search by item, location, username, or contact"
-                        value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
+    placeholder="Search by item, location, username, or contact"
+    value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
                 </div>
                 <div class="col-md-2 mb-3">
                     <select class="form-control" name="type">
                         <option value="">All Types</option>
-                        <option value="Found" <%=typeof searchType !=='undefined' && searchType==='Found' ? 'selected' : '' %>>Found</option>
-                        <option value="Lost" <%=typeof searchType !=='undefined' && searchType==='Lost' ? 'selected' : '' %>>Lost</option>
+                        <option value="Found" <%= typeof searchType !== 'undefined' && searchType === 'Found' ? 'selected' : '' %>>Found</option>
+                        <option value="Lost" <%= typeof searchType !== 'undefined' && searchType === 'Lost' ? 'selected' : '' %>>Lost</option>
                     </select>
                 </div>
                 <div class="col-md-2 mb-3">
                     <select class="form-control" name="status">
                         <option value="">All Statuses</option>
-                        <option value="Pending" <%=typeof searchStatus !=='undefined' && searchStatus==='Pending' ? 'selected' : '' %>>Pending</option>
-                        <option value="Founded" <%=typeof searchStatus !=='undefined' && searchStatus==='Founded' ? 'selected' : '' %>>Founded</option>
-                        <option value="Unreceived" <%=typeof searchStatus !=='undefined' && searchStatus==='Unreceived' ? 'selected' : '' %>>Unreceived</option>
-                        <option value="Received" <%=typeof searchStatus !=='undefined' && searchStatus==='Received' ? 'selected' : '' %>>Received</option>
+                        <option value="Pending" <%= typeof searchStatus !== 'undefined' && searchStatus === 'Pending' ? 'selected' : '' %>>Pending</option>
+                        <option value="Founded" <%= typeof searchStatus !== 'undefined' && searchStatus === 'Founded' ? 'selected' : '' %>>Founded</option>
+                        <option value="Unreceived" <%= typeof searchStatus !== 'undefined' && searchStatus === 'Unreceived' ? 'selected' : '' %>>Unreceived</option>
+                        <option value="Received" <%= typeof searchStatus !== 'undefined' && searchStatus === 'Received' ? 'selected' : '' %>>Received</option>
                     </select>
                 </div>
                 <div class="col-md-3 mb-3">
                     <input type="date" class="form-control" name="date" placeholder="Search by date"
-                        value="<%= typeof searchDate !== 'undefined' ? searchDate : '' %>">
+    value="<%= typeof searchDate !== 'undefined' ? searchDate : '' %>">
                 </div>
                 <div class="col-md-2 mb-3">
-                    <button type="submit" class="btn btn-primary btn-block">Search</button>
+                    <button type="submit" class="btn btn-primary w-100">Search</button>
                 </div>
             </div>
         </form>
-
-        
 
         <h2>All Posts</h2>
         <div class="table-responsive">
@@ -82,7 +80,7 @@
                 </thead>
                 <tbody>
                     <% posts.forEach(post=> { %>
-                        <tr>
+                        <tr> 
                             <td>
                                 <%= post.post_type %>
                             </td>
