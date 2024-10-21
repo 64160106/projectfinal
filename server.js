@@ -469,5 +469,80 @@ app.get('/admin-dashboard', async (req, res) => {
     }
 });
 
+app.get('/my-posts', isAuthenticated, (req, res) => {
+    const userId = req.session.userId;
+    const page = parseInt(req.query.page) || 1;
+    const limit = 9;
+    const offset = (page - 1) * limit;
+
+    const search = req.query.search || '';
+    const type = req.query.type || '';
+    const status = req.query.status || '';
+    const date = req.query.date || '';
+
+    let query = `SELECT posts.*, users.username FROM posts
+                 INNER JOIN users ON posts.user_id = users.id
+                 WHERE posts.user_id = ?`;
+    let countQuery = `SELECT COUNT(*) as total FROM posts WHERE user_id = ?`;
+    
+    const queryParams = [userId];
+    const countQueryParams = [userId];
+
+    if (search) {
+        query += ` AND (posts.item_description LIKE ? OR posts.location LIKE ? OR posts.contact_info LIKE ?)`;
+        countQuery += ` AND (item_description LIKE ? OR location LIKE ? OR contact_info LIKE ?)`;
+        const searchParam = `%${search}%`;
+        queryParams.push(searchParam, searchParam, searchParam);
+        countQueryParams.push(searchParam, searchParam, searchParam);
+    }
+
+    if (type) {
+        query += ` AND posts.post_type = ?`;
+        countQuery += ` AND post_type = ?`;
+        queryParams.push(type);
+        countQueryParams.push(type);
+    }
+
+    if (status) {
+        query += ` AND posts.status = ?`;
+        countQuery += ` AND status = ?`;
+        queryParams.push(status);
+        countQueryParams.push(status);
+    }
+
+    if (date) {
+        query += ` AND DATE(posts.found_time) = ?`;
+        countQuery += ` AND DATE(found_time) = ?`;
+        queryParams.push(date);
+        countQueryParams.push(date);
+    }
+    
+    query += ` ORDER BY posts.created_at DESC LIMIT ? OFFSET ?`;
+    queryParams.push(limit, offset);
+    
+    db.query(countQuery, countQueryParams, (err, countResult) => {
+        if (err) throw err;
+        
+        const totalPosts = countResult[0].total;
+        const totalPages = Math.ceil(totalPosts / limit);
+        
+        db.query(query, queryParams, (err, results) => {
+            if (err) throw err;
+            res.render('my-posts', { 
+                posts: results, 
+                username: req.session.username,
+                isAdmin: req.session.isAdmin || false,
+                currentPage: page,
+                totalPages,
+                searchParams: req.query,
+                search,
+                type,
+                status,
+                date
+            });
+        });
+    });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

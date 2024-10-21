@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Posts - Lost and Found System</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .card-img-top {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .update-form {
+            display: flex;
+            align-items: center;
+        }
+
+        .update-form select {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Lost and Found</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <span class="navbar-text">Welcome, <%= username %></span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/create-post">Create Post</a>
+                </li>
+                <% if (isAdmin) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin-dashboard">Admin Dashboard</a>
+                    </li>
+                <% } %>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2 class="mb-4">My Posts</h2>
+        <a href="/" class="btn btn-outline-primary mb-3">
+            <i class="fas fa-arrow-left mr-2"></i>Back to All Posts
+        </a>
+        <form action="/my-posts" method="GET" class="mb-4">
+            <div class="form-row">
+                <div class="col-md-3 mb-3">
+                    <input type="text" class="form-control" name="search" placeholder="Search..." value="<%= search %>">
+                </div>
+                <div class="col-md-2 mb-3">
+                    <select class="form-control" name="type">
+                        <option value="">All Types</option>
+                        <option value="lost" <%= type === 'lost' ? 'selected' : '' %>>Lost</option>
+                        <option value="found" <%= type === 'found' ? 'selected' : '' %>>Found</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <select class="form-control" name="status">
+                        <option value="">All Statuses</option>
+                        <option value="Pending" <%=typeof searchStatus !=='undefined' && searchStatus==='Pending' ? 'selected' : '' %>>Pending</option>
+                        <option value="Founded" <%=typeof searchStatus !=='undefined' && searchStatus==='Founded' ? 'selected' : '' %>>Founded</option>
+                        <option value="Unreceived" <%=typeof searchStatus !=='undefined' && searchStatus==='Unreceived' ? 'selected' : '' %>>Unreceived</option>
+                        <option value="Received" <%=typeof searchStatus !=='undefined' && searchStatus==='Received' ? 'selected' : '' %>>Received</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <input type="date" class="form-control" name="date" value="<%= date %>">
+                </div>
+                <div class="col-md-2 mb-3">
+                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                </div>
+            </div>
+        </form>
+
+        <% if (posts.length > 0) { %>
+            <div class="row">
+                <% posts.forEach(post => { %>
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-header text-white <%= post.post_type === 'Lost' ? 'bg-danger' : 'bg-success' %> text-center">
+                                <h5 class="mb-0"><%= post.post_type %></h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="status-banner <%= 
+                                    post.post_type === 'Found' ? 
+                                        (post.status === 'Pending' ? 'bg-warning' : 'bg-success') : 
+                                        (post.status === 'Unreceived' ? 'bg-info' : 'bg-secondary') 
+                                %> text-white text-center mb-3 py-2">
+                                    <h5 class="mb-0"><%= post.status %></h5>
+                                </div>
+                                <img class="card-img-top mb-3" src="/uploads/<%= post.image %>"
+                                    alt="Image of <%= post.item_description %>">
+                                <h5 class="card-title">
+                                    <%= post.item_description %>
+                                </h5>
+                                <p class="card-text"><strong>Location:</strong>
+                                    <%= post.location %>
+                                </p>
+                                <p class="card-text">
+                                    <strong><%= post.post_type === 'Lost' ? 'Lost on:' : 'Found on:' %></strong>
+                                    <%= new Date(post.found_time).toLocaleString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' }) %>
+                                </p>
+                                <p class="card-text"><strong>Contact:</strong>
+                                    <%= post.contact_info %>
+                                </p>
+                            </div>
+                            <div class="card-footer bg-transparent">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <form action="/delete-post/<%= post.id %>" method="POST" class="d-inline"
+                                        onsubmit="return confirm('Are you sure you want to delete this post?');">
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                    <form action="/update-status/<%= post.id %>" method="POST" class="update-form">
+                                        <select name="newStatus" class="form-control form-control-sm">
+                                            <% if (post.post_type === 'Found') { %>
+                                                <option value="Pending" <%= post.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                                <option value="Founded" <%= post.status === 'Founded' ? 'selected' : '' %>>Founded</option>
+                                            <% } else { %>
+                                                <option value="Unreceived" <%= post.status === 'Unreceived' ? 'selected' : '' %>>Unreceived</option>
+                                                <option value="Received" <%= post.status === 'Received' ? 'selected' : '' %>>Received</option>
+                                            <% } %>
+                                        </select>
+                                        <button type="submit" class="btn btn-success btn-sm">Update</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <% for(let i = 1; i <= totalPages; i++) { %>
+                        <li class="page-item <%= currentPage == i ? 'active' : '' %>">
+                            <a class="page-link" href="/my-posts?page=<%= i %>&search=<%= search %>&type=<%= type %>&status=<%= status %>&date=<%= date %>"><%= i %></a>
+                        </li>
+                    <% } %>
+                </ul>
+            </nav>
+        <% } else { %>
+            <div class="alert alert-info">You haven't created any posts yet.</div>
+        <% } %>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

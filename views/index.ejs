@@ -36,7 +36,7 @@
             <ul class="navbar-nav ml-auto">
                 <% if (username) { %>
                     <li class="nav-item">
-                        <span class="navbar-text">Welcome, <%= username %></span>
+                        <a href="/my-posts" class="navbar-text">My Posts, <%= username %></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/create-post">Create Post</a>
@@ -96,6 +96,8 @@
                 </div>
             </div>
         </form>
+
+        
 
         <% if (posts.length> 0) { %>
             <div class="row">
