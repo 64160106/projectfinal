@@ -1,25 +1,22 @@
-const sequelize = require('../db');
 const { DataTypes } = require('sequelize');
-const User = require('./user');
+const sequelize = require('../db');
 
-User.hasMany(Post, { foreignKey: 'userId', as: 'posts' });
-Post.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 const Post = sequelize.define('Post', {
   item_description: {
-    type: sequelize.Sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: false
   },
   location: {
-    type: sequelize.Sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: false
   },
   found_time: {
-    type: sequelize.Sequelize.DATE,
+    type: DataTypes.DATE,
     allowNull: false
   },
   image: {
-    type: sequelize.Sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: true
   },
   post_type: {
@@ -27,20 +24,15 @@ const Post = sequelize.define('Post', {
     allowNull: false
   },
   status: {
-    type: sequelize.Sequelize.ENUM('Pending', 'Founded', 'Unreceived', 'Received'),
+    type: DataTypes.ENUM('Pending', 'Founded', 'Unreceived', 'Received'),
     defaultValue: function() {
       return this.post_type === 'Found' ? 'Pending' : 'Unreceived';
     }
   },
-  contact_info: {  // เพิ่มฟิลด์นี้
-    type: sequelize.Sequelize.STRING,
+  contact_info: {
+    type: DataTypes.STRING,
     allowNull: true
   }
 });
 
-Post.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-
-module.exports = {
-  User,
-  Post
-};
+module.exports = Post;

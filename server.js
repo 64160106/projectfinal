@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const { check, validationResult } = require('express-validator');
 const multer = require('multer');
 const path = require('path');
+const { Sequelize, Op } = require('sequelize');
 
 
 const app = express();
@@ -197,7 +198,10 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
     db.query('SELECT * FROM users WHERE username = ?', [username], (err, results) => {
-        if (err) throw err;
+        if (err) {
+            console.error(err);
+            return res.render('login', { error: 'An error occurred. Please try again.' });
+        }
         if (results.length > 0) {
             bcrypt.compare(password, results[0].password, (err, result) => {
                 if (result) {
@@ -206,11 +210,11 @@ app.post('/login', (req, res) => {
                     req.session.isAdmin = results[0].is_admin === 1;
                     res.redirect('/');
                 } else {
-                    res.send('Incorrect username or password');
+                    res.render('login', { error: 'Incorrect username or password' });
                 }
             });
         } else {
-            res.send('Incorrect username or password');
+            res.render('login', { error: 'Incorrect username or password' });
         }
     });
 });
@@ -306,22 +310,6 @@ app.get('/delete-post/:id', isAuthenticated, (req, res) => {
     });
 });
 
-app.get('/admin-dashboard', isAuthenticated, isAdmin, (req, res) => {
-    const query = `
-        SELECT posts.*, users.username 
-        FROM posts 
-        LEFT JOIN users ON posts.user_id = users.id 
-        ORDER BY posts.created_at DESC
-    `;
-
-    db.query(query, (err, results) => {
-        if (err) {
-            console.error('Error fetching posts:', err);
-            return res.status(500).send('Internal Server Error');
-        }
-        res.render('admin-dashboard', { posts: results });
-    });
-});
 
 app.post('/admin-dashboard/delete-user/:id', isAdmin, (req, res) => {
     const userId = req.params.id;
@@ -402,71 +390,44 @@ app.post('/admin/delete-post/:id', isAuthenticated, isAdmin, (req, res) => {
     });
 });
 
-app.get('/admin-dashboard', async (req, res) => {
-    try {
-      const posts = await Post.findAll({
-        include: [{ model: User, attributes: ['username'] }],
-        order: [['createdAt', 'DESC']]
-      });
-      res.render('admin-dashboard', { posts });
-    } catch (error) {
-      console.error('Error fetching posts:', error);
-      res.status(500).send('Internal Server Error');
-    }
-  });
+app.get('/admin-dashboard', isAdmin, (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const itemsPerPage = 10; // หรือจำนวนที่คุณต้องการแสดงต่อหน้า
+    const offset = (page - 1) * itemsPerPage;
 
-  app.get('/admin-dashboard', isAdmin, async (req, res) => {
-    console.log("Accessing admin dashboard");
-    
-    const search = req.query.search || '';
-    const type = req.query.type || '';
-    const status = req.query.status || '';
-    const date = req.query.date || '';
+    // ค้นหาจำนวน posts ทั้งหมด
+    db.query('SELECT COUNT(*) as total FROM posts', (err, countResult) => {
+        if (err) {
+            console.error('Error counting posts:', err);
+            return res.status(500).send('Internal Server Error');
+        }
 
-    let whereClause = {};
-    let order = [['createdAt', 'DESC']];
+        const totalItems = countResult[0].total;
 
-    if (search) {
-        whereClause[Op.or] = [
-            { item_description: { [Op.like]: `%${search}%` } },
-            { location: { [Op.like]: `%${search}%` } },
-            { contact_info: { [Op.like]: `%${search}%` } },
-            { '$User.username$': { [Op.like]: `%${search}%` } }
-        ];
-        // Move matching results to the top
-        order.unshift([sequelize.literal(`(CASE WHEN item_description LIKE '%${search}%' THEN 0 ELSE 1 END)`), 'ASC']);
-    }
-    if (type) {
-        whereClause.post_type = type;
-    }
-    if (status) {
-        whereClause.status = status;
-    }
-    if (date) {
-        whereClause.found_time = {
-            [Op.gte]: new Date(date),
-            [Op.lt]: new Date(new Date(date).setDate(new Date(date).getDate() + 1))
-        };
-    }
+        // ดึงข้อมูล posts สำหรับหน้าปัจจุบัน
+        const query = `SELECT posts.*, users.username FROM posts 
+                       INNER JOIN users ON posts.user_id = users.id 
+                       ORDER BY posts.created_at DESC LIMIT ? OFFSET ?`;
+        
+        db.query(query, [itemsPerPage, offset], (err, posts) => {
+            if (err) {
+                console.error('Error fetching posts:', err);
+                return res.status(500).send('Internal Server Error');
+            }
 
-    try {
-        const posts = await Post.findAll({
-            where: whereClause,
-            include: [{ model: User, attributes: ['username'] }],
-            order: order
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+            res.render('admin-dashboard', {
+                posts,
+                currentPage: page,
+                totalPages,
+                totalItems,
+                itemsPerPage,
+                searchParams: '',  // หรือใส่ค่าตามที่คุณใช้สำหรับการค้นหา
+                // เพิ่มตัวแปรอื่น ๆ ที่คุณอาจต้องการส่งไปยัง view
+            });
         });
-
-        res.render('admin-dashboard', { 
-            posts, 
-            searchQuery: search, 
-            searchType: type, 
-            searchStatus: status, 
-            searchDate: date 
-        });
-    } catch (error) {
-        console.error('Error fetching posts:', error);
-        res.status(500).send('Internal Server Error');
-    }
+    });
 });
 
 app.get('/my-posts', isAuthenticated, (req, res) => {

@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
 const User = sequelize.define('User', {
@@ -18,7 +18,5 @@ const User = sequelize.define('User', {
       }
 });
 
-// เพิ่มความสัมพันธ์กับ Post
-User.hasMany(Post, { foreignKey: 'userId', as: 'posts' });
-
+// เพิ่มความสัมพันธ์กับ Pos
 module.exports = User;

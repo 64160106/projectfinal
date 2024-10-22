@@ -31,39 +31,6 @@
     <div class="container mt-4">
         <h1 class="mb-4">Admin Dashboard</h1>
 
-        <form action="/admin-dashboard" method="GET" class="mb-4">
-            <div class="form-row">
-                <div class="col-md-3 mb-3">
-                    <input type="text" class="form-control" name="search"
-    placeholder="Search by item, location, username, or contact"
-    value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
-                </div>
-                <div class="col-md-2 mb-3">
-                    <select class="form-control" name="type">
-                        <option value="">All Types</option>
-                        <option value="Found" <%= typeof searchType !== 'undefined' && searchType === 'Found' ? 'selected' : '' %>>Found</option>
-                        <option value="Lost" <%= typeof searchType !== 'undefined' && searchType === 'Lost' ? 'selected' : '' %>>Lost</option>
-                    </select>
-                </div>
-                <div class="col-md-2 mb-3">
-                    <select class="form-control" name="status">
-                        <option value="">All Statuses</option>
-                        <option value="Pending" <%= typeof searchStatus !== 'undefined' && searchStatus === 'Pending' ? 'selected' : '' %>>Pending</option>
-                        <option value="Founded" <%= typeof searchStatus !== 'undefined' && searchStatus === 'Founded' ? 'selected' : '' %>>Founded</option>
-                        <option value="Unreceived" <%= typeof searchStatus !== 'undefined' && searchStatus === 'Unreceived' ? 'selected' : '' %>>Unreceived</option>
-                        <option value="Received" <%= typeof searchStatus !== 'undefined' && searchStatus === 'Received' ? 'selected' : '' %>>Received</option>
-                    </select>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <input type="date" class="form-control" name="date" placeholder="Search by date"
-    value="<%= typeof searchDate !== 'undefined' ? searchDate : '' %>">
-                </div>
-                <div class="col-md-2 mb-3">
-                    <button type="submit" class="btn btn-primary w-100">Search</button>
-                </div>
-            </div>
-        </form>
-
         <h2>All Posts</h2>
         <div class="table-responsive">
             <table class="table table-striped">
@@ -224,6 +191,39 @@
                 </tbody>
             </table>
         </div>
+        <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        <% if (currentPage > 1) { %>
+            <li class="page-item">
+                <a class="page-link" href="/admin-dashboard?page=<%= currentPage - 1 %><%= searchParams %>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        <% } %>
+
+        <% for(let i = 1; i <= totalPages; i++) { %>
+            <li class="page-item <%= currentPage == i ? 'active' : '' %>">
+                <a class="page-link" href="/admin-dashboard?page=<%= i %><%= searchParams %>"><%= i %></a>
+            </li>
+        <% } %>
+
+        <% if (currentPage < totalPages) { %>
+            <li class="page-item">
+                <a class="page-link" href="/admin-dashboard?page=<%= currentPage + 1 %><%= searchParams %>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        <% } %>
+    </ul>
+</nav>
+
+<% if (totalItems > 0) { %>
+    <p class="text-center">
+        Showing <%= (currentPage - 1) * itemsPerPage + 1 %>-<%= Math.min(currentPage * itemsPerPage, totalItems) %> of <%= totalItems %> posts
+    </p>
+<% } else { %>
+    <p class="text-center">No posts found</p>
+<% } %>
     </div>
 
 
