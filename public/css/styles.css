@@ -358,3 +358,29 @@ footer {
     font-weight: bold;
     text-transform: uppercase;
 }
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.status-form {
+    width: 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.status-form select {
+    width: 60%;
+    margin-right: 0.5rem;
+}
+
+.status-form button {
+    width: 40%;
+}
+
+.action-buttons .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
