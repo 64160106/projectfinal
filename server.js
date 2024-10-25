@@ -392,30 +392,52 @@ app.post('/admin/delete-post/:id', isAuthenticated, isAdmin, (req, res) => {
 
 app.get('/admin-dashboard', isAdmin, (req, res) => {
     const page = parseInt(req.query.page) || 1;
-    const itemsPerPage = 10; // หรือจำนวนที่คุณต้องการแสดงต่อหน้า
+    const itemsPerPage = 10;
     const offset = (page - 1) * itemsPerPage;
 
-    // ค้นหาจำนวน posts ทั้งหมด
-    db.query('SELECT COUNT(*) as total FROM posts', (err, countResult) => {
-        if (err) {
-            console.error('Error counting posts:', err);
-            return res.status(500).send('Internal Server Error');
-        }
+    // คำสั่ง SQL สำหรับดึงสถิติต่างๆ
+    const statisticsQueries = [
+        'SELECT COUNT(*) as totalPosts FROM posts',
+        'SELECT COUNT(*) as totalUsers FROM users',
+        'SELECT COUNT(*) as totalLostItems FROM posts WHERE post_type = "lost"',
+        'SELECT COUNT(*) as totalFoundItems FROM posts WHERE post_type = "found"',
+        'SELECT COUNT(*) as totalResolvedItems FROM posts WHERE status = "resolved"',
+        'SELECT COUNT(DISTINCT user_id) as userCount FROM posts' // เพิ่มคำสั่ง SQL นี้
+    ];
 
-        const totalItems = countResult[0].total;
-
+    // ใช้ Promise.all เพื่อรัน queries พร้อมกัน
+    Promise.all(statisticsQueries.map(query => {
+        return new Promise((resolve, reject) => {
+            db.query(query, (err, result) => {
+                if (err) reject(err);
+                else resolve(result[0]);
+            });
+        });
+    }))
+    .then(statisticsResults => {
         // ดึงข้อมูล posts สำหรับหน้าปัจจุบัน
-        const query = `SELECT posts.*, users.username FROM posts 
-                       INNER JOIN users ON posts.user_id = users.id 
-                       ORDER BY posts.created_at DESC LIMIT ? OFFSET ?`;
+        const postsQuery = `SELECT posts.*, users.username FROM posts 
+                            INNER JOIN users ON posts.user_id = users.id 
+                            ORDER BY posts.created_at DESC LIMIT ? OFFSET ?`;
         
-        db.query(query, [itemsPerPage, offset], (err, posts) => {
+        db.query(postsQuery, [itemsPerPage, offset], (err, posts) => {
             if (err) {
                 console.error('Error fetching posts:', err);
                 return res.status(500).send('Internal Server Error');
             }
 
+            const totalItems = statisticsResults[0].totalPosts;
             const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+            // สร้าง object สำหรับเก็บสถิติ
+            const statistics = {
+                totalPosts: statisticsResults[0].totalPosts,
+                totalUsers: statisticsResults[1].totalUsers,
+                totalLostItems: statisticsResults[2].totalLostItems,
+                totalFoundItems: statisticsResults[3].totalFoundItems,
+                totalResolvedItems: statisticsResults[4].totalResolvedItems,
+                userCount: statisticsResults[5].userCount // เพิ่มข้อมูลนี้
+            };
 
             res.render('admin-dashboard', {
                 posts,
@@ -423,10 +445,20 @@ app.get('/admin-dashboard', isAdmin, (req, res) => {
                 totalPages,
                 totalItems,
                 itemsPerPage,
-                searchParams: '',  // หรือใส่ค่าตามที่คุณใช้สำหรับการค้นหา
-                // เพิ่มตัวแปรอื่น ๆ ที่คุณอาจต้องการส่งไปยัง view
+                searchParams: '',
+                statistics, // ส่งข้อมูลสถิติไปยัง view
+                userCount: statisticsResults[5].userCount,
+                postStats: [ // เพิ่มข้อมูลนี้
+                    { label: 'Total Posts', value: statistics.totalPosts },
+                    { label: 'Lost Items', value: statistics.totalLostItems },
+                    { label: 'Found Items', value: statistics.totalFoundItems },
+                ]
             });
         });
+    })
+    .catch(error => {
+        console.error('Error fetching statistics:', error);
+        res.status(500).send('Internal Server Error');
     });
 });
 

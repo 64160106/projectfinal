@@ -31,6 +31,54 @@
     <div class="container mt-4">
         <h1 class="mb-4">Admin Dashboard</h1>
 
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Users Posted</h5>
+                        <p class="card-text"><%= userCount %></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Posts</h5>
+                        <p class="card-text"><%= totalItems %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <h3 class="mb-3">Post Statistics</h3>
+<div class="row mb-4">
+    <% postStats.forEach(stat => { %>
+        <div class="col-md-3 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><%= stat.label %></h5>
+                    <p class="card-text"><%= stat.value %></p>
+                </div>
+            </div>
+        </div>
+    <% }) %>
+    
+    <!-- แสดงสถานะของโพสต์ -->
+    <div class="col-md-3 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Post Status</h5>
+                <ul class="list-unstyled">
+                    <li>Pending: <%= posts.filter(p => p.status === 'Pending').length %></li>
+                    <li>Founded: <%= posts.filter(p => p.status === 'Founded').length %></li>
+                    <li>Unreceived: <%= posts.filter(p => p.status === 'Unreceived').length %></li>
+                    <li>Received: <%= posts.filter(p => p.status === 'Received').length %></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
         <h2>All Posts</h2>
         <div class="table-responsive">
             <table class="table table-striped">
