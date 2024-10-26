@@ -25,7 +25,7 @@
         <mxCell id="pkItPYo71j152DaaY_Dj-9" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;กดปุ่ม Login&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="qCjNcv8Ia3v7E2IGuloR-1">
           <mxGeometry x="90" y="290" width="120" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="qCjNcv8Ia3v7E2IGuloR-4" value="Container" style="swimlane;startSize=30;fontSize=14;" parent="1" vertex="1">
+        <mxCell id="qCjNcv8Ia3v7E2IGuloR-4" value="ระบบ" style="swimlane;startSize=30;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="450" y="170" width="300" height="550" as="geometry" />
         </mxCell>
         <mxCell id="pkItPYo71j152DaaY_Dj-4" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;แสดงหน้า Login&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="qCjNcv8Ia3v7E2IGuloR-4">
