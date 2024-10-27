@@ -496,8 +496,8 @@
         <mxCell id="UBNfcvaw9CsF37MfMLtb-4" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;เข้าสู่ระบบ&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="UBNfcvaw9CsF37MfMLtb-1">
           <mxGeometry x="60" y="120" width="180" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="UBNfcvaw9CsF37MfMLtb-5" value="เข้าถึงหน้า Create Post ของระบบ" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="UBNfcvaw9CsF37MfMLtb-1">
-          <mxGeometry x="60" y="200" width="180" height="50" as="geometry" />
+        <mxCell id="UBNfcvaw9CsF37MfMLtb-5" value="เลือกโพสต์ที่ต้องการแก้ไขสถานะ" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="UBNfcvaw9CsF37MfMLtb-1">
+          <mxGeometry x="60" y="220" width="180" height="50" as="geometry" />
         </mxCell>
         <mxCell id="UBNfcvaw9CsF37MfMLtb-10" value="ระบบ" style="swimlane;startSize=30;fontSize=14;" vertex="1" parent="1">
           <mxGeometry x="450" y="170" width="530" height="870" as="geometry" />
@@ -521,6 +521,9 @@
           <mxGeometry x="180" y="820" width="40" height="40" as="geometry" />
         </mxCell>
         <mxCell id="UBNfcvaw9CsF37MfMLtb-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="UBNfcvaw9CsF37MfMLtb-4" target="UBNfcvaw9CsF37MfMLtb-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UBNfcvaw9CsF37MfMLtb-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="UBNfcvaw9CsF37MfMLtb-17" target="UBNfcvaw9CsF37MfMLtb-5">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
