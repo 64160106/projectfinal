@@ -408,16 +408,16 @@
           <mxGeometry x="450" y="170" width="360" height="630" as="geometry" />
         </mxCell>
         <mxCell id="WDSryblqMBsb1xiBCaoE-14" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-11">
-          <mxGeometry x="150" y="530" width="80" height="70" as="geometry" />
+          <mxGeometry x="150" y="420" width="80" height="70" as="geometry" />
         </mxCell>
         <mxCell id="WDSryblqMBsb1xiBCaoE-15" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;ตรวจสอบข้อมูล&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-11">
-          <mxGeometry x="140" y="500" width="100" height="30" as="geometry" />
+          <mxGeometry x="140" y="390" width="100" height="30" as="geometry" />
         </mxCell>
         <mxCell id="WDSryblqMBsb1xiBCaoE-18" value="Y" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-11">
-          <mxGeometry x="120" y="590" width="60" height="30" as="geometry" />
+          <mxGeometry x="120" y="480" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="WDSryblqMBsb1xiBCaoE-19" value="N" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-11">
-          <mxGeometry x="220" y="520" width="60" height="30" as="geometry" />
+          <mxGeometry x="230" y="420" width="30" height="30" as="geometry" />
         </mxCell>
         <mxCell id="oe2sPQmugk_-8LmN_qIY-2" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;แสดงหน้าหลักของระบบ&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-11">
           <mxGeometry x="120" y="120" width="160" height="50" as="geometry" />
@@ -435,6 +435,9 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="oe2sPQmugk_-8LmN_qIY-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="oe2sPQmugk_-8LmN_qIY-5" target="oe2sPQmugk_-8LmN_qIY-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="oe2sPQmugk_-8LmN_qIY-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="oe2sPQmugk_-8LmN_qIY-9" target="WDSryblqMBsb1xiBCaoE-14">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
