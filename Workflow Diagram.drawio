@@ -303,8 +303,8 @@
         <mxCell id="nyyOMu0giEhIDbnLgQda-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="nyyOMu0giEhIDbnLgQda-1" source="nyyOMu0giEhIDbnLgQda-6" target="nyyOMu0giEhIDbnLgQda-7" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="nyyOMu0giEhIDbnLgQda-6" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;กรอกข้อมูล&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="nyyOMu0giEhIDbnLgQda-1" vertex="1">
-          <mxGeometry x="90" y="210" width="120" height="50" as="geometry" />
+        <mxCell id="nyyOMu0giEhIDbnLgQda-6" value="กรอกข้อมูลหรือเลือกเงื่อนไขการค้นหาที่ต้องการ" style="rounded=0;whiteSpace=wrap;html=1;" parent="nyyOMu0giEhIDbnLgQda-1" vertex="1">
+          <mxGeometry x="80" y="210" width="140" height="50" as="geometry" />
         </mxCell>
         <mxCell id="nyyOMu0giEhIDbnLgQda-7" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;กดปุ่ม Register&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="nyyOMu0giEhIDbnLgQda-1" vertex="1">
           <mxGeometry x="90" y="290" width="120" height="50" as="geometry" />
