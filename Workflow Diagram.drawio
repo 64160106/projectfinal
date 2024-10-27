@@ -851,6 +851,105 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-1" value="ผู้ดูแลระบบ" style="swimlane;startSize=30;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="55" y="170" width="300" height="950" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="OsCb3z_3gmLqVuafh8tf-1" source="OsCb3z_3gmLqVuafh8tf-3" target="OsCb3z_3gmLqVuafh8tf-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-3" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_2;whiteSpace=wrap;fillColor=#000000;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-1">
+          <mxGeometry x="130" y="50" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-4" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;เข้าสู่ระบบ&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-1">
+          <mxGeometry x="60" y="120" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-5" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;กดเข้าสู่หน้า Admin-dashboard&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-1">
+          <mxGeometry x="40" y="220" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-6" value="เลือกโพสต์ที่ต้องการแก้ไขข้อมูลจากรายการโพสต์" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-1">
+          <mxGeometry x="60" y="380" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="OsCb3z_3gmLqVuafh8tf-1" source="OsCb3z_3gmLqVuafh8tf-8" target="OsCb3z_3gmLqVuafh8tf-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-8" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;แก้ไขข้อมูลที่ต้องการปรับปรุง&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-1">
+          <mxGeometry x="62.5" y="530" width="175" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-9" value="กดปุ่ม &quot;Save Changes&quot;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-1">
+          <mxGeometry x="62.5" y="620" width="175" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-10" value="ระบบ" style="swimlane;startSize=30;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="355" y="170" width="440" height="950" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-11" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;แสดงหน้าหลักของระบบ&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-10">
+          <mxGeometry x="135" y="120" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-12" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;แสดงหน้า Admin-dashboard&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-10">
+          <mxGeometry x="130" y="290" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-13" value="แสดงฟอร์ม Edit Post ซึ่งประกอบด้วยรายละเอียดของโพสต์ที่สามารถแก้ไขได้" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-10">
+          <mxGeometry x="115" y="450" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="OsCb3z_3gmLqVuafh8tf-10" source="OsCb3z_3gmLqVuafh8tf-16" target="OsCb3z_3gmLqVuafh8tf-21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="OsCb3z_3gmLqVuafh8tf-10" source="OsCb3z_3gmLqVuafh8tf-16" target="OsCb3z_3gmLqVuafh8tf-23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-16" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-10">
+          <mxGeometry x="175" y="610" width="80" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-17" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;ตรวจสอบข้อมูล&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-10">
+          <mxGeometry x="165" y="580" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-18" value="Y" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-10">
+          <mxGeometry x="155" y="660" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-19" value="N" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-10">
+          <mxGeometry x="240" y="600" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="OsCb3z_3gmLqVuafh8tf-10" source="OsCb3z_3gmLqVuafh8tf-21" target="OsCb3z_3gmLqVuafh8tf-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-21" value="แสดงข้อความแจ้งเตือนให้แก้ไขข้อมูลใหม่" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-10">
+          <mxGeometry x="295" y="620" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="OsCb3z_3gmLqVuafh8tf-10" source="OsCb3z_3gmLqVuafh8tf-23" target="OsCb3z_3gmLqVuafh8tf-24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-23" value="บันทึกการเปลี่ยนแปลงเข้าสู่ฐานข้อมูล" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-10">
+          <mxGeometry x="105" y="730" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-24" value="แสดงหน้า Admin-dashboard" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-10">
+          <mxGeometry x="130" y="810" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-25" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_2;whiteSpace=wrap;fillColor=#000000;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-10">
+          <mxGeometry x="195" y="890" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="OsCb3z_3gmLqVuafh8tf-10" source="OsCb3z_3gmLqVuafh8tf-24" target="OsCb3z_3gmLqVuafh8tf-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OsCb3z_3gmLqVuafh8tf-4" target="OsCb3z_3gmLqVuafh8tf-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OsCb3z_3gmLqVuafh8tf-11" target="OsCb3z_3gmLqVuafh8tf-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OsCb3z_3gmLqVuafh8tf-12" target="OsCb3z_3gmLqVuafh8tf-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OsCb3z_3gmLqVuafh8tf-6" target="OsCb3z_3gmLqVuafh8tf-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OsCb3z_3gmLqVuafh8tf-5" target="OsCb3z_3gmLqVuafh8tf-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OsCb3z_3gmLqVuafh8tf-13" target="OsCb3z_3gmLqVuafh8tf-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="OsCb3z_3gmLqVuafh8tf-9" target="OsCb3z_3gmLqVuafh8tf-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
