@@ -395,8 +395,14 @@
         <mxCell id="oe2sPQmugk_-8LmN_qIY-1" value="เข้าถึงหน้า Create Post ของระบบ" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-1">
           <mxGeometry x="60" y="200" width="180" height="50" as="geometry" />
         </mxCell>
+        <mxCell id="oe2sPQmugk_-8LmN_qIY-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WDSryblqMBsb1xiBCaoE-1" source="oe2sPQmugk_-8LmN_qIY-7" target="oe2sPQmugk_-8LmN_qIY-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="oe2sPQmugk_-8LmN_qIY-7" value="กรอกข้อมูลที่จำเป็นสำหรับโพสต์ทั้งหมดตามที่ฟอร์มกำหนด" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-1">
           <mxGeometry x="60" y="340" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="oe2sPQmugk_-8LmN_qIY-9" value="กดปุ่ม &quot;Create Post&quot; เพื่อสร้างโพสต์ใหม่" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-1">
+          <mxGeometry x="40" y="430" width="220" height="50" as="geometry" />
         </mxCell>
         <mxCell id="WDSryblqMBsb1xiBCaoE-11" value="ระบบ" style="swimlane;startSize=30;fontSize=14;" vertex="1" parent="1">
           <mxGeometry x="450" y="170" width="360" height="630" as="geometry" />
