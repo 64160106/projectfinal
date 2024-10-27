@@ -500,7 +500,7 @@
           <mxGeometry x="60" y="220" width="180" height="50" as="geometry" />
         </mxCell>
         <mxCell id="UBNfcvaw9CsF37MfMLtb-10" value="ระบบ" style="swimlane;startSize=30;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="450" y="170" width="530" height="870" as="geometry" />
+          <mxGeometry x="450" y="170" width="400" height="870" as="geometry" />
         </mxCell>
         <mxCell id="UBNfcvaw9CsF37MfMLtb-13" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="UBNfcvaw9CsF37MfMLtb-10">
           <mxGeometry x="160" y="420" width="80" height="70" as="geometry" />
