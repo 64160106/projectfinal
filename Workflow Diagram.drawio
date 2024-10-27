@@ -520,10 +520,16 @@
         <mxCell id="UBNfcvaw9CsF37MfMLtb-25" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_2;whiteSpace=wrap;fillColor=#000000;" vertex="1" parent="UBNfcvaw9CsF37MfMLtb-10">
           <mxGeometry x="180" y="820" width="40" height="40" as="geometry" />
         </mxCell>
+        <mxCell id="UBNfcvaw9CsF37MfMLtb-35" value="แสดงตัวเลือกสำหรับแก้ไขสถานะของโพสต์" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="UBNfcvaw9CsF37MfMLtb-10">
+          <mxGeometry x="80" y="290" width="240" height="50" as="geometry" />
+        </mxCell>
         <mxCell id="UBNfcvaw9CsF37MfMLtb-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="UBNfcvaw9CsF37MfMLtb-4" target="UBNfcvaw9CsF37MfMLtb-17">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="UBNfcvaw9CsF37MfMLtb-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="UBNfcvaw9CsF37MfMLtb-17" target="UBNfcvaw9CsF37MfMLtb-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="UBNfcvaw9CsF37MfMLtb-36" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="UBNfcvaw9CsF37MfMLtb-5" target="UBNfcvaw9CsF37MfMLtb-35">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
