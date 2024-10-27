@@ -866,9 +866,6 @@
         <mxCell id="OsCb3z_3gmLqVuafh8tf-5" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;กดเข้าสู่หน้า Admin-dashboard&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-1">
           <mxGeometry x="40" y="220" width="220" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="OsCb3z_3gmLqVuafh8tf-6" value="เลือกโพสต์ที่ต้องการแก้ไขข้อมูลจากรายการโพสต์" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-1">
-          <mxGeometry x="60" y="380" width="180" height="50" as="geometry" />
-        </mxCell>
         <mxCell id="OsCb3z_3gmLqVuafh8tf-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="OsCb3z_3gmLqVuafh8tf-1" source="OsCb3z_3gmLqVuafh8tf-8" target="OsCb3z_3gmLqVuafh8tf-9">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
@@ -882,13 +879,16 @@
           <mxGeometry x="355" y="170" width="440" height="950" as="geometry" />
         </mxCell>
         <mxCell id="OsCb3z_3gmLqVuafh8tf-11" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;แสดงหน้าหลักของระบบ&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-10">
-          <mxGeometry x="135" y="120" width="160" height="50" as="geometry" />
+          <mxGeometry x="140" y="120" width="160" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="OsCb3z_3gmLqVuafh8tf-10" source="OsCb3z_3gmLqVuafh8tf-12" target="OsCb3z_3gmLqVuafh8tf-6">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="OsCb3z_3gmLqVuafh8tf-12" value="&lt;font style=&quot;font-size: 13px;&quot;&gt;แสดงหน้า Admin-dashboard&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-10">
-          <mxGeometry x="130" y="290" width="170" height="50" as="geometry" />
+          <mxGeometry x="135" y="290" width="170" height="50" as="geometry" />
         </mxCell>
         <mxCell id="OsCb3z_3gmLqVuafh8tf-13" value="แสดงฟอร์ม Edit Post ซึ่งประกอบด้วยรายละเอียดของโพสต์ที่สามารถแก้ไขได้" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-10">
-          <mxGeometry x="115" y="450" width="200" height="50" as="geometry" />
+          <mxGeometry x="130" y="450" width="200" height="50" as="geometry" />
         </mxCell>
         <mxCell id="OsCb3z_3gmLqVuafh8tf-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="OsCb3z_3gmLqVuafh8tf-10" source="OsCb3z_3gmLqVuafh8tf-16" target="OsCb3z_3gmLqVuafh8tf-21">
           <mxGeometry relative="1" as="geometry" />
@@ -929,16 +929,13 @@
         <mxCell id="OsCb3z_3gmLqVuafh8tf-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="OsCb3z_3gmLqVuafh8tf-10" source="OsCb3z_3gmLqVuafh8tf-24" target="OsCb3z_3gmLqVuafh8tf-25">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
+        <mxCell id="OsCb3z_3gmLqVuafh8tf-6" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;แสดงข้อมูลสถิติหลัก&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="OsCb3z_3gmLqVuafh8tf-10">
+          <mxGeometry x="130" y="390" width="180" height="50" as="geometry" />
+        </mxCell>
         <mxCell id="OsCb3z_3gmLqVuafh8tf-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OsCb3z_3gmLqVuafh8tf-4" target="OsCb3z_3gmLqVuafh8tf-11">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="OsCb3z_3gmLqVuafh8tf-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OsCb3z_3gmLqVuafh8tf-11" target="OsCb3z_3gmLqVuafh8tf-5">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="OsCb3z_3gmLqVuafh8tf-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OsCb3z_3gmLqVuafh8tf-12" target="OsCb3z_3gmLqVuafh8tf-6">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="OsCb3z_3gmLqVuafh8tf-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OsCb3z_3gmLqVuafh8tf-6" target="OsCb3z_3gmLqVuafh8tf-13">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="OsCb3z_3gmLqVuafh8tf-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="OsCb3z_3gmLqVuafh8tf-5" target="OsCb3z_3gmLqVuafh8tf-12">
