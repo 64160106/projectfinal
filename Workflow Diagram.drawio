@@ -398,8 +398,11 @@
         <mxCell id="oe2sPQmugk_-8LmN_qIY-7" value="กรอกข้อมูลที่จำเป็นสำหรับโพสต์ทั้งหมดตามที่ฟอร์มกำหนด" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-1">
           <mxGeometry x="60" y="340" width="180" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="oe2sPQmugk_-8LmN_qIY-9" value="กดปุ่ม &quot;Create Post&quot; เพื่อสร้างโพสต์ใหม่" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-1">
+        <mxCell id="oe2sPQmugk_-8LmN_qIY-9" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;กดปุ่ม &quot;Create Post&quot; เพื่อสร้างโพสต์ใหม่&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-1">
           <mxGeometry x="40" y="430" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="oe2sPQmugk_-8LmN_qIY-22" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;กดยืนยันการสร้างโพสต์&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-1">
+          <mxGeometry x="40" y="650" width="220" height="50" as="geometry" />
         </mxCell>
         <mxCell id="WDSryblqMBsb1xiBCaoE-11" value="ระบบ" style="swimlane;startSize=30;fontSize=14;" vertex="1" parent="1">
           <mxGeometry x="450" y="170" width="530" height="870" as="geometry" />
@@ -440,9 +443,6 @@
         <mxCell id="oe2sPQmugk_-8LmN_qIY-14" value="แสดงข้อความแจ้งเตือนให้ผู้ใช้แก้ไขข้อมูล และให้กรอกข้อมูลในฟอร์มใหม่" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-11">
           <mxGeometry x="300" y="430" width="210" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="oe2sPQmugk_-8LmN_qIY-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WDSryblqMBsb1xiBCaoE-11" source="oe2sPQmugk_-8LmN_qIY-17" target="oe2sPQmugk_-8LmN_qIY-19">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
         <mxCell id="oe2sPQmugk_-8LmN_qIY-17" value="แสดงข้อความยืนยันการสร้างโพสต์สำเร็จ" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-11">
           <mxGeometry x="90" y="650" width="220" height="50" as="geometry" />
         </mxCell>
@@ -468,6 +468,12 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="oe2sPQmugk_-8LmN_qIY-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="oe2sPQmugk_-8LmN_qIY-9" target="WDSryblqMBsb1xiBCaoE-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="oe2sPQmugk_-8LmN_qIY-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="oe2sPQmugk_-8LmN_qIY-17" target="oe2sPQmugk_-8LmN_qIY-22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="oe2sPQmugk_-8LmN_qIY-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="oe2sPQmugk_-8LmN_qIY-22" target="oe2sPQmugk_-8LmN_qIY-19">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
