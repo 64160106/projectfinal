@@ -434,6 +434,9 @@
         <mxCell id="oe2sPQmugk_-8LmN_qIY-12" value="บันทึกโพสต์ลงฐานข้อมูล" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-11">
           <mxGeometry x="90" y="550" width="220" height="50" as="geometry" />
         </mxCell>
+        <mxCell id="oe2sPQmugk_-8LmN_qIY-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="WDSryblqMBsb1xiBCaoE-11" source="oe2sPQmugk_-8LmN_qIY-14" target="oe2sPQmugk_-8LmN_qIY-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="oe2sPQmugk_-8LmN_qIY-14" value="แสดงข้อความแจ้งเตือนให้ผู้ใช้แก้ไขข้อมูล และให้กรอกข้อมูลในฟอร์มใหม่" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-11">
           <mxGeometry x="300" y="430" width="210" height="50" as="geometry" />
         </mxCell>
