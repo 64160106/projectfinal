@@ -378,7 +378,7 @@
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="WDSryblqMBsb1xiBCaoE-1" value="ผู้ใช้งานระบบ" style="swimlane;startSize=30;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="150" y="170" width="300" height="810" as="geometry" />
+          <mxGeometry x="150" y="170" width="300" height="870" as="geometry" />
         </mxCell>
         <mxCell id="WDSryblqMBsb1xiBCaoE-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WDSryblqMBsb1xiBCaoE-1" source="WDSryblqMBsb1xiBCaoE-3" target="WDSryblqMBsb1xiBCaoE-4">
           <mxGeometry relative="1" as="geometry" />
@@ -388,9 +388,6 @@
         </mxCell>
         <mxCell id="WDSryblqMBsb1xiBCaoE-4" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;เข้าสู่ระบบ&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-1">
           <mxGeometry x="60" y="120" width="180" height="50" as="geometry" />
-        </mxCell>
-        <mxCell id="WDSryblqMBsb1xiBCaoE-8" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_2;whiteSpace=wrap;fillColor=#000000;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-1">
-          <mxGeometry x="130" y="560" width="40" height="40" as="geometry" />
         </mxCell>
         <mxCell id="oe2sPQmugk_-8LmN_qIY-1" value="เข้าถึงหน้า Create Post ของระบบ" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-1">
           <mxGeometry x="60" y="200" width="180" height="50" as="geometry" />
@@ -405,7 +402,7 @@
           <mxGeometry x="40" y="430" width="220" height="50" as="geometry" />
         </mxCell>
         <mxCell id="WDSryblqMBsb1xiBCaoE-11" value="ระบบ" style="swimlane;startSize=30;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="450" y="170" width="530" height="810" as="geometry" />
+          <mxGeometry x="450" y="170" width="530" height="870" as="geometry" />
         </mxCell>
         <mxCell id="oe2sPQmugk_-8LmN_qIY-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WDSryblqMBsb1xiBCaoE-11" source="WDSryblqMBsb1xiBCaoE-14" target="oe2sPQmugk_-8LmN_qIY-12">
           <mxGeometry relative="1" as="geometry" />
@@ -451,6 +448,12 @@
         </mxCell>
         <mxCell id="oe2sPQmugk_-8LmN_qIY-19" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;แสดงหน้าหลักของระบบ&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-11">
           <mxGeometry x="90" y="740" width="220" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="WDSryblqMBsb1xiBCaoE-8" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.start_2;whiteSpace=wrap;fillColor=#000000;" vertex="1" parent="WDSryblqMBsb1xiBCaoE-11">
+          <mxGeometry x="180" y="820" width="40" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="oe2sPQmugk_-8LmN_qIY-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="WDSryblqMBsb1xiBCaoE-11" source="oe2sPQmugk_-8LmN_qIY-19" target="WDSryblqMBsb1xiBCaoE-8">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="oe2sPQmugk_-8LmN_qIY-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="WDSryblqMBsb1xiBCaoE-4" target="oe2sPQmugk_-8LmN_qIY-2">
           <mxGeometry relative="1" as="geometry" />
