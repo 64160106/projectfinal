@@ -709,7 +709,7 @@
         <mxCell id="nV4RYrKpPIi9gu5MUWQC-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="nV4RYrKpPIi9gu5MUWQC-8" target="nV4RYrKpPIi9gu5MUWQC-11">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="nV4RYrKpPIi9gu5MUWQC-8" value="สร้างโพสต์" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="nV4RYrKpPIi9gu5MUWQC-8" value="แก้ไขสถานะของโพสต์" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="365" y="300" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="nV4RYrKpPIi9gu5MUWQC-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="nV4RYrKpPIi9gu5MUWQC-11" target="nV4RYrKpPIi9gu5MUWQC-12">
@@ -718,14 +718,14 @@
         <mxCell id="nV4RYrKpPIi9gu5MUWQC-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="nV4RYrKpPIi9gu5MUWQC-11" target="nV4RYrKpPIi9gu5MUWQC-13">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="nV4RYrKpPIi9gu5MUWQC-11" value="เลือกประเภทของโพสต์&lt;br&gt;ว่าเป็นผู้พบของหาย&lt;br&gt;ใช่เหรอไม่ (found)&amp;nbsp;" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="340" y="390" width="170" height="140" as="geometry" />
+        <mxCell id="nV4RYrKpPIi9gu5MUWQC-11" value="ตรวจสอบว่าโพสต์นั้นเป็นผู้พบของหาย&lt;br&gt;ใช่เหรอไม่ (found)&amp;nbsp;" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="310" y="390" width="230" height="180" as="geometry" />
         </mxCell>
-        <mxCell id="nV4RYrKpPIi9gu5MUWQC-12" value="กรอกข้อมูลโพสต์" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="180" y="430" width="120" height="60" as="geometry" />
+        <mxCell id="nV4RYrKpPIi9gu5MUWQC-12" value="แก้ไขสถานะของโพสต์&lt;br&gt;จาก &quot;Pending&quot;&lt;br&gt;เป็น &quot;Founded&quot;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="450" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="nV4RYrKpPIi9gu5MUWQC-13" value="กรอกข้อมูลโพสต์" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="550" y="430" width="120" height="60" as="geometry" />
+          <mxGeometry x="580" y="450" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="nV4RYrKpPIi9gu5MUWQC-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="nV4RYrKpPIi9gu5MUWQC-16" target="nV4RYrKpPIi9gu5MUWQC-12">
           <mxGeometry relative="1" as="geometry" />
@@ -734,7 +734,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="nV4RYrKpPIi9gu5MUWQC-16" value="ตรวจสอบว่ากรอกข้อมูล&lt;br&gt;ครบหรือไม่" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="155" y="540" width="170" height="140" as="geometry" />
+          <mxGeometry x="145" y="540" width="170" height="140" as="geometry" />
         </mxCell>
         <mxCell id="nV4RYrKpPIi9gu5MUWQC-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="nV4RYrKpPIi9gu5MUWQC-19" target="nV4RYrKpPIi9gu5MUWQC-13">
           <mxGeometry relative="1" as="geometry" />
@@ -743,7 +743,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="nV4RYrKpPIi9gu5MUWQC-19" value="ตรวจสอบว่ากรอกข้อมูล&lt;br&gt;ครบหรือไม่" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="525" y="540" width="170" height="140" as="geometry" />
+          <mxGeometry x="535" y="540" width="170" height="140" as="geometry" />
         </mxCell>
         <mxCell id="nV4RYrKpPIi9gu5MUWQC-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="nV4RYrKpPIi9gu5MUWQC-12" target="nV4RYrKpPIi9gu5MUWQC-16">
           <mxGeometry relative="1" as="geometry" />
@@ -779,10 +779,10 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="nV4RYrKpPIi9gu5MUWQC-31" value="Yes" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="310" y="410" width="60" height="30" as="geometry" />
+          <mxGeometry x="290" y="400" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="nV4RYrKpPIi9gu5MUWQC-32" value="No" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="480" y="410" width="60" height="30" as="geometry" />
+          <mxGeometry x="510" y="400" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="nV4RYrKpPIi9gu5MUWQC-33" value="Yes" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="170" y="670" width="60" height="30" as="geometry" />
