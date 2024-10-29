@@ -666,7 +666,7 @@
           <mxGeometry x="310" y="410" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="VJDUX2gGgcWhsJN6ZcKM-2" value="No" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="490" y="410" width="60" height="30" as="geometry" />
+          <mxGeometry x="480" y="410" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="VJDUX2gGgcWhsJN6ZcKM-3" value="Yes" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="170" y="670" width="60" height="30" as="geometry" />
