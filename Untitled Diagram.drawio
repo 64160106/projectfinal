@@ -851,6 +851,9 @@
             </Array>
           </mxGeometry>
         </mxCell>
+        <mxCell id="sM3Rc32fQhJHaBt8-nF2-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="sM3Rc32fQhJHaBt8-nF2-11" target="sM3Rc32fQhJHaBt8-nF2-22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="sM3Rc32fQhJHaBt8-nF2-11" value="ตรวจสอบว่าเป็นผู้ดูแลระบบหรือไม่" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry x="310" y="320" width="230" height="180" as="geometry" />
         </mxCell>
@@ -858,10 +861,19 @@
           <mxGeometry x="270" y="440" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="sM3Rc32fQhJHaBt8-nF2-14" value="No" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="530" y="440" width="60" height="30" as="geometry" />
+          <mxGeometry x="500" y="360" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="sM3Rc32fQhJHaBt8-nF2-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="sM3Rc32fQhJHaBt8-nF2-4" target="sM3Rc32fQhJHaBt8-nF2-11">
           <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sM3Rc32fQhJHaBt8-nF2-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="sM3Rc32fQhJHaBt8-nF2-22" target="sM3Rc32fQhJHaBt8-nF2-24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sM3Rc32fQhJHaBt8-nF2-22" value="เข้าถึงหน้า Admin Dashboard" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="540" width="210" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sM3Rc32fQhJHaBt8-nF2-24" value="แก้ไขรายละเอียดของโพสต์หรือไม่" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="310" y="640" width="230" height="180" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
